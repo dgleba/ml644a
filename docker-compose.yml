@@ -6,7 +6,7 @@ services:
     # http://10.4.1.245:7888
     # https://jpy.172.83.13.116.nip.io
     build: .
-    shm_size: 28GB 
+    shm_size: 64GB 
     # image: fastai/fastai:2022-05-29 
     # image: xx___pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
     ports:
@@ -23,9 +23,9 @@ services:
     working_dir: /home/albe
     environment:
         # https://github.com/nginx-proxy/nginx-proxy/pull/1157
-        - VIRTUAL_HOST_SPECIFIC_PORT=true
-        - VIRTUAL_HOST=jpy.172.83.13.116.nip.io:8888,tb.172.83.13.116.nip.io:6006
-        #- VIRTUAL_PORT=8888
+        #- VIRTUAL_HOST_SPECIFIC_PORT=true
+        - VIRTUAL_HOST=jpy.172.83.13.116.nip.io,tb.172.83.13.116.nip.io
+        - VIRTUAL_PORT=8888
         - LETSENCRYPT_HOST=jpy.172.83.13.116.nip.io,tb.172.83.13.116.nip.io
         - LETSENCRYPT_EMAIL=dgleba@gmail.com
     deploy:
