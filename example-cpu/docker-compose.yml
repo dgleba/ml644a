@@ -3,7 +3,7 @@ version: "3.6"
 services:
 
   tf:
-    # http://10.4.1.245:6884
+    # http://10.4.1.245:7888
     # https://jpy.172.83.15.56.nip.io
     build: .
     shm_size: 32GB 
