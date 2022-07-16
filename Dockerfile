@@ -1,5 +1,5 @@
-# from tensorflow/tensorflow:2.9.1-gpu-jupyter
-from tensorflow/tensorflow:2.9.1-jupyter
+from tensorflow/tensorflow:2.9.1-gpu-jupyter
+# from tensorflow/tensorflow:2.9.1-jupyter
 
 EXPOSE 8888
 
