@@ -1,0 +1,406 @@
+Sun Jul 17 13:48:31 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A100-SXM...  On   | 00000000:00:05.0 Off |                    0 |
+| N/A   24C    P0    41W / 400W |    119MiB / 40536MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      1195      G   /usr/lib/xorg/Xorg                 81MiB |
+|    0   N/A  N/A      1832      G   /usr/bin/gnome-shell               36MiB |
++-----------------------------------------------------------------------------+
+Linux psdw6rhji 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           88Gi       1.0Gi        81Gi        11Mi       6.3Gi        86Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.3 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+udev                          45G     0   45G   0% /dev
+tmpfs                        8.9G  1.4M  8.9G   1% /run
+/dev/mapper/ubuntu--vg-root   50G   36G   12G  77% /
+tmpfs                         45G     0   45G   0% /dev/shm
+tmpfs                        5.0M     0  5.0M   0% /run/lock
+tmpfs                         45G     0   45G   0% /sys/fs/cgroup
+/dev/loop0                    56M   56M     0 100% /snap/core18/2344
+/dev/loop1                    62M   62M     0 100% /snap/core20/1376
+/dev/loop2                    56M   56M     0 100% /snap/core18/2409
+/dev/loop3                    62M   62M     0 100% /snap/core20/1518
+/dev/loop5                    68M   68M     0 100% /snap/lxd/22526
+/dev/loop4                    68M   68M     0 100% /snap/lxd/21835
+/dev/loop6                    44M   44M     0 100% /snap/snapd/14978
+/dev/loop7                    44M   44M     0 100% /snap/snapd/15177
+tmpfs                        8.9G   20K  8.9G   1% /run/user/1000
+/dev/loop8                    47M   47M     0 100% /snap/snapd/16292
+ # SSD with EfficientNet-b0 + BiFPN feature extractor,
+# shared box predictor and focal loss (a.k.a EfficientDet-d0).
+# See EfficientDet, Tan et al, https://arxiv.org/abs/1911.09070
+# See Lin et al, https://arxiv.org/abs/1708.02002
+# Trained on COCO, initialized from an EfficientNet-b0 checkpoint.
+#
+# Train on TPU-8
+
+model {
+  ssd {
+    inplace_batchnorm_update: true
+    freeze_batchnorm: false
+    num_classes: 2
+    add_background_class: false
+    box_coder {
+      faster_rcnn_box_coder {
+        y_scale: 10.0
+        x_scale: 10.0
+        height_scale: 5.0
+        width_scale: 5.0
+      }
+    }
+    matcher {
+      argmax_matcher {
+        matched_threshold: 0.5
+        unmatched_threshold: 0.5
+        ignore_thresholds: false
+        negatives_lower_than_unmatched: true
+        force_match_for_each_row: true
+        use_matmul_gather: true
+      }
+    }
+    similarity_calculator {
+      iou_similarity {
+      }
+    }
+    encode_background_as_zeros: true
+    anchor_generator {
+      multiscale_anchor_generator {
+        min_level: 3
+        max_level: 7
+        anchor_scale: 4.0
+        aspect_ratios: [1.0, 2.0, 0.5]
+        scales_per_octave: 3
+      }
+    }
+    image_resizer {
+      keep_aspect_ratio_resizer {
+        min_dimension: 256
+        max_dimension: 8064
+        pad_to_max_dimension: true
+        }
+    }
+    box_predictor {
+      weight_shared_convolutional_box_predictor {
+        depth: 64
+        class_prediction_bias_init: -4.6
+        conv_hyperparams {
+          force_use_bias: true
+          activation: SWISH
+          regularizer {
+            l2_regularizer {
+              weight: 0.00004
+            }
+          }
+          initializer {
+            random_normal_initializer {
+              stddev: 0.01
+              mean: 0.0
+            }
+          }
+          batch_norm {
+            scale: true
+            decay: 0.99
+            epsilon: 0.001
+          }
+        }
+        num_layers_before_predictor: 3
+        kernel_size: 3
+        use_depthwise: true
+      }
+    }
+    feature_extractor {
+      type: 'ssd_efficientnet-b0_bifpn_keras'
+      bifpn {
+        min_level: 3
+        max_level: 7
+        num_iterations: 3
+        num_filters: 64
+      }
+      conv_hyperparams {
+        force_use_bias: true
+        activation: SWISH
+        regularizer {
+          l2_regularizer {
+            weight: 0.00004
+          }
+        }
+        initializer {
+          truncated_normal_initializer {
+            stddev: 0.03
+            mean: 0.0
+          }
+        }
+        batch_norm {
+          scale: true,
+          decay: 0.99,
+          epsilon: 0.001,
+        }
+      }
+    }
+    loss {
+      classification_loss {
+        weighted_sigmoid_focal {
+          alpha: 0.25
+          gamma: 1.5
+        }
+      }
+      localization_loss {
+        weighted_smooth_l1 {
+        }
+      }
+      classification_weight: 1.0
+      localization_weight: 1.0
+    }
+    normalize_loss_by_num_matches: true
+    normalize_loc_loss_by_codesize: true
+    post_processing {
+      batch_non_max_suppression {
+        score_threshold: 1e-8
+        iou_threshold: 0.5
+        max_detections_per_class: 100
+        max_total_detections: 100
+      }
+      score_converter: SIGMOID
+    }
+  }
+}
+
+train_config: {
+  fine_tune_checkpoint: "../tflib/efficientdet_d0_coco17_tpu-32/checkpoint/ckpt-0"
+  fine_tune_checkpoint_version: V2
+  fine_tune_checkpoint_type: "detection"
+  batch_size: 1
+  sync_replicas: true
+  startup_delay_steps: 0
+  replicas_to_aggregate: 8
+  use_bfloat16: true
+  num_steps: 8000
+  data_augmentation_options {
+    random_horizontal_flip {
+    }
+  }
+  optimizer {
+    momentum_optimizer: {
+      learning_rate: {
+        cosine_decay_learning_rate {
+          learning_rate_base: 8e-2
+          total_steps: 300000
+          warmup_learning_rate: .001
+          warmup_steps: 2500
+        }
+      }
+      momentum_optimizer_value: 0.9
+    }
+    use_moving_average: false
+  }
+  max_number_of_boxes: 100
+  unpad_groundtruth_tensors: false
+}
+
+train_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/train.record"
+  }
+}
+
+eval_config: {
+  metrics_set: "coco_detection_metrics"
+  use_moving_averages: false
+  batch_size: 1;
+}
+
+eval_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  shuffle: false
+  num_epochs: 1
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/test.record"
+  }
+}
+2022-07-17 13:48:40.969639: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:40.994849: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:40.999436: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:41.005672: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-17 13:48:41.008293: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:41.012911: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:41.017352: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:42.894663: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:42.899283: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:42.903744: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 13:48:42.908680: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 38301 MB memory:  -> device: 0, name: NVIDIA A100-SXM4-40GB, pci bus id: 0000:00:05.0, compute capability: 8.0
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+I0717 13:48:44.764065 140684804470592 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+INFO:tensorflow:Maybe overwriting train_steps: 8000
+I0717 13:48:44.773994 140684804470592 config_util.py:552] Maybe overwriting train_steps: 8000
+INFO:tensorflow:Maybe overwriting use_bfloat16: False
+I0717 13:48:44.774522 140684804470592 config_util.py:552] Maybe overwriting use_bfloat16: False
+I0717 13:48:44.793210 140684804470592 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0717 13:48:44.793605 140684804470592 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0717 13:48:44.793836 140684804470592 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0717 13:48:44.805469 140684804470592 efficientnet_model.py:143] round_filter input=32 output=32
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.079010 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.085102 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.091555 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.094086 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.113278 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.123097 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.139210 140684804470592 efficientnet_model.py:143] round_filter input=32 output=32
+I0717 13:48:45.139572 140684804470592 efficientnet_model.py:143] round_filter input=16 output=16
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.176386 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.179039 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.183465 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.185903 140684804470592 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 13:48:45.399967 140684804470592 efficientnet_model.py:143] round_filter input=16 output=16
+I0717 13:48:45.400469 140684804470592 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 13:48:46.088442 140684804470592 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 13:48:46.088951 140684804470592 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 13:48:46.753573 140684804470592 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 13:48:46.754095 140684804470592 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 13:48:47.804592 140684804470592 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 13:48:47.805151 140684804470592 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 13:48:48.850866 140684804470592 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 13:48:48.851393 140684804470592 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 13:48:50.163797 140684804470592 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 13:48:50.164335 140684804470592 efficientnet_model.py:143] round_filter input=320 output=320
+I0717 13:48:50.489674 140684804470592 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0717 13:48:50.617416 140684804470592 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+W0717 13:48:50.732181 140684804470592 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+INFO:tensorflow:Reading unweighted datasets: ['../imgdata/ir4/train.record']
+I0717 13:48:50.740868 140684804470592 dataset_builder.py:162] Reading unweighted datasets: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Reading record datasets for input file: ['../imgdata/ir4/train.record']
+I0717 13:48:50.741468 140684804470592 dataset_builder.py:79] Reading record datasets for input file: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Number of filenames to read: 1
+I0717 13:48:50.741759 140684804470592 dataset_builder.py:80] Number of filenames to read: 1
+WARNING:tensorflow:num_readers has been reduced to 1 to match input file shards.
+W0717 13:48:50.742012 140684804470592 dataset_builder.py:86] num_readers has been reduced to 1 to match input file shards.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+W0717 13:48:50.747199 140684804470592 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+W0717 13:48:50.812249 140684804470592 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+W0717 13:49:08.286893 140684804470592 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0717 13:49:15.704711 140684804470592 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2022-07-17 13:51:21.665791: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8201
+2022-07-17 13:51:24.478966: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+2022-07-17 13:51:34.767669: W tensorflow/core/kernels/gpu_utils.cc:50] Failed to allocate memory for convolution redzone checking; skipping this check. This is benign and only means that we won't check cudnn for out-of-bounds reads and writes. This message will only be printed once.
+2022-07-17 13:51:42.359125: I tensorflow/stream_executor/cuda/cuda_blas.cc:1786] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+2022-07-17 13:51:42.480968: I tensorflow/stream_executor/stream.cc:4514] [stream=0x19564990,impl=0x65ec8d0] INTERNAL: stream did not block host until done; was already in an error state
+2022-07-17 13:51:42.481922: W tensorflow/core/kernels/gpu_utils.cc:70] Failed to check cudnn convolutions for out-of-bounds reads and writes with an error message: 'stream did not block host until done; was already in an error state'; skipping this check. This only means that we won't check cudnn for out-of-bounds reads and writes. This message will only be printed once.
+2022-07-17 13:51:42.484906: I tensorflow/stream_executor/stream.cc:4514] [stream=0x19564990,impl=0x65ec8d0] INTERNAL: stream did not block host until done; was already in an error state
+2022-07-17 13:51:42.513313: I tensorflow/stream_executor/stream.cc:4514] [stream=0x19564990,impl=0x65ec8d0] INTERNAL: stream did not block host until done; was already in an error state
+2022-07-17 13:51:42.513590: I tensorflow/stream_executor/stream.cc:4514] [stream=0x19564990,impl=0x65ec8d0] INTERNAL: stream did not block host until done; was already in an error state
+/home/paperspace/.local/lib/python3.8/site-packages/keras/backend.py:450: UserWarning: `tf.keras.backend.set_learning_phase` is deprecated and will be removed after 2020-10-11. To update it, simply pass a True/False value to the `training` argument of the `__call__` method of your layer or model.
+  warnings.warn('`tf.keras.backend.set_learning_phase` is deprecated and '
+Traceback (most recent call last):
+  File "../tflib/models/research/object_detection/model_main_tf2.py", line 114, in <module>
+    tf.compat.v1.app.run()
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/platform/app.py", line 36, in run
+    _run(main=main, argv=argv, flags_parser=_parse_flags_tolerate_undef)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/absl/app.py", line 312, in run
+    _run_main(main, args)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/absl/app.py", line 258, in _run_main
+    sys.exit(main(argv))
+  File "../tflib/models/research/object_detection/model_main_tf2.py", line 105, in main
+    model_lib_v2.train_loop(
+  File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py", line 605, in train_loop
+    load_fine_tune_checkpoint(
+  File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py", line 401, in load_fine_tune_checkpoint
+    _ensure_model_is_built(model, input_dataset, unpad_groundtruth_tensors)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py", line 176, in _ensure_model_is_built
+    strategy.run(
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/distribute/distribute_lib.py", line 1312, in run
+    return self._extended.call_for_each_replica(fn, args=args, kwargs=kwargs)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/distribute/distribute_lib.py", line 2888, in call_for_each_replica
+    return self._call_for_each_replica(fn, args, kwargs)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/distribute/mirrored_strategy.py", line 676, in _call_for_each_replica
+    return mirrored_run.call_for_each_replica(
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/distribute/mirrored_run.py", line 83, in call_for_each_replica
+    return wrapped(args, kwargs)
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/traceback_utils.py", line 153, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/eager/execute.py", line 54, in quick_execute
+    tensors = pywrap_tfe.TFE_Py_Execute(ctx._handle, device_name, op_name,
+tensorflow.python.framework.errors_impl.InternalError: Graph execution error:
+
+Detected at node 'Loss/MatMulGather_3/MatMul' defined at (most recent call last):
+    File "/usr/lib/python3.8/threading.py", line 890, in _bootstrap
+      self._bootstrap_inner()
+    File "/usr/lib/python3.8/threading.py", line 932, in _bootstrap_inner
+      self.run()
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py", line 171, in _dummy_computation_fn
+      return _compute_losses_and_predictions_dicts(model, features, labels,
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py", line 130, in _compute_losses_and_predictions_dicts
+      losses_dict = model.loss(
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/meta_architectures/ssd_meta_arch.py", line 842, in loss
+      (batch_cls_targets, batch_cls_weights, batch_reg_targets,
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/meta_architectures/ssd_meta_arch.py", line 1066, in _assign_targets
+      if train_using_confidences:
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/meta_architectures/ssd_meta_arch.py", line 1083, in _assign_targets
+      groundtruth_weights_list)
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/core/target_assigner.py", line 510, in batch_assign
+      for anchors, gt_boxes, gt_class_targets, gt_weights in zip(
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/core/target_assigner.py", line 512, in batch_assign
+      (cls_targets, cls_weights,
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/core/target_assigner.py", line 210, in assign
+      cls_weights = self._create_classification_weights(match,
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/core/target_assigner.py", line 371, in _create_classification_weights
+      groundtruth_weights,
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/core/matcher.py", line 214, in gather_based_on_match
+      gathered_tensor = self._gather_op(input_tensor, gather_indices)
+    File "/home/paperspace/.local/lib/python3.8/site-packages/object_detection/utils/ops.py", line 1031, in matmul_gather_on_zeroth_axis
+      gathered_result_flattened = tf.matmul(indicator_matrix, params2d)
+Node: 'Loss/MatMulGather_3/MatMul'
+Blas xGEMV launch failed : a.shape=[1,12180861,102], b.shape=[1,102,1], m=12180861, n=1, k=102
+	 [[{{node Loss/MatMulGather_3/MatMul}}]] [Op:__inference__dummy_computation_fn_23951]

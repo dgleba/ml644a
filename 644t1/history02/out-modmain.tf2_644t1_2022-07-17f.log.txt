@@ -1,0 +1,208 @@
+Sun Jul 17 12:23:22 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA Quadro M...  On   | 00000000:00:05.0  On |                  N/A |
+| 46%   34C    P8    13W / 120W |    128MiB /  8126MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      1078      G   /usr/lib/xorg/Xorg                 53MiB |
+|    0   N/A  N/A      1578      G   /usr/bin/gnome-shell               70MiB |
++-----------------------------------------------------------------------------+
+Linux psfnd5bcb 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           29Gi       1.0Gi        26Gi        10Mi       2.3Gi        27Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.3 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+udev                          15G     0   15G   0% /dev
+tmpfs                        3.0G  1.6M  3.0G   1% /run
+/dev/mapper/ubuntu--vg-root   50G   29G   19G  61% /
+tmpfs                         15G     0   15G   0% /dev/shm
+tmpfs                        5.0M     0  5.0M   0% /run/lock
+tmpfs                         15G     0   15G   0% /sys/fs/cgroup
+/dev/loop0                    56M   56M     0 100% /snap/core18/2344
+/dev/loop1                    56M   56M     0 100% /snap/core18/2409
+/dev/loop2                    62M   62M     0 100% /snap/core20/1518
+/dev/loop3                    62M   62M     0 100% /snap/core20/1376
+/dev/loop4                    68M   68M     0 100% /snap/lxd/22526
+/dev/loop5                    47M   47M     0 100% /snap/snapd/16292
+/dev/loop6                    44M   44M     0 100% /snap/snapd/15177
+/dev/loop7                    68M   68M     0 100% /snap/lxd/22753
+tmpfs                        3.0G   16K  3.0G   1% /run/user/1000
+2022-07-17 12:23:26.143604: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.152719: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.153793: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.155164: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-17 12:23:26.155818: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.156552: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.157209: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.939697: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.940459: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.941059: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:23:26.941644: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 7315 MB memory:  -> device: 0, name: NVIDIA Quadro M4000, pci bus id: 0000:00:05.0, compute capability: 5.2
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+I0717 12:23:27.107316 139726263125824 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+INFO:tensorflow:Maybe overwriting train_steps: 8000
+I0717 12:23:27.111596 139726263125824 config_util.py:552] Maybe overwriting train_steps: 8000
+INFO:tensorflow:Maybe overwriting use_bfloat16: False
+I0717 12:23:27.111708 139726263125824 config_util.py:552] Maybe overwriting use_bfloat16: False
+I0717 12:23:27.119236 139726263125824 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0717 12:23:27.119422 139726263125824 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0717 12:23:27.119501 139726263125824 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0717 12:23:27.125792 139726263125824 efficientnet_model.py:143] round_filter input=32 output=32
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.300437 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.303726 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.306735 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.307734 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.315711 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.319200 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.325936 139726263125824 efficientnet_model.py:143] round_filter input=32 output=32
+I0717 12:23:27.326053 139726263125824 efficientnet_model.py:143] round_filter input=16 output=16
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.340999 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.341987 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.343698 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.344650 139726263125824 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:23:27.424280 139726263125824 efficientnet_model.py:143] round_filter input=16 output=16
+I0717 12:23:27.424475 139726263125824 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 12:23:27.697241 139726263125824 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 12:23:27.697408 139726263125824 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 12:23:27.963031 139726263125824 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 12:23:27.963215 139726263125824 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 12:23:28.399523 139726263125824 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 12:23:28.399703 139726263125824 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 12:23:28.798460 139726263125824 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 12:23:28.798715 139726263125824 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 12:23:29.327520 139726263125824 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 12:23:29.327785 139726263125824 efficientnet_model.py:143] round_filter input=320 output=320
+I0717 12:23:29.456229 139726263125824 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0717 12:23:29.505898 139726263125824 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+W0717 12:23:29.549026 139726263125824 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+INFO:tensorflow:Reading unweighted datasets: ['../imgdata/ir4/train.record']
+I0717 12:23:29.552512 139726263125824 dataset_builder.py:162] Reading unweighted datasets: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Reading record datasets for input file: ['../imgdata/ir4/train.record']
+I0717 12:23:29.552762 139726263125824 dataset_builder.py:79] Reading record datasets for input file: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Number of filenames to read: 1
+I0717 12:23:29.552913 139726263125824 dataset_builder.py:80] Number of filenames to read: 1
+WARNING:tensorflow:num_readers has been reduced to 1 to match input file shards.
+W0717 12:23:29.553023 139726263125824 dataset_builder.py:86] num_readers has been reduced to 1 to match input file shards.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+W0717 12:23:29.554904 139726263125824 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+W0717 12:23:29.581668 139726263125824 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+W0717 12:23:37.050656 139726263125824 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0717 12:23:39.979497 139726263125824 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2022-07-17 12:24:07.150798: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8201
+2022-07-17 12:24:07.571201: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+/home/paperspace/.local/lib/python3.8/site-packages/keras/backend.py:450: UserWarning: `tf.keras.backend.set_learning_phase` is deprecated and will be removed after 2020-10-11. To update it, simply pass a True/False value to the `training` argument of the `__call__` method of your layer or model.
+  warnings.warn('`tf.keras.backend.set_learning_phase` is deprecated and '
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/deprecation.py:629: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Use fn_output_signature instead
+W0717 12:24:14.634691 139721138480896 deprecation.py:554] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/deprecation.py:629: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Use fn_output_signature instead
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0717 12:24:22.875541 139721138480896 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0717 12:24:35.082147 139721138480896 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0717 12:24:45.945009 139721138480896 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0717 12:24:57.740118 139721138480896 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+2022-07-17 12:25:21.535823: I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+INFO:tensorflow:Step 1100 per-step time 1.442s
+I0717 12:26:38.433709 139726263125824 model_lib_v2.py:705] Step 1100 per-step time 1.442s
+INFO:tensorflow:{'Loss/classification_loss': 0.09200573,
+ 'Loss/localization_loss': 0.02399055,
+ 'Loss/regularization_loss': 0.030204987,
+ 'Loss/total_loss': 0.14620127,
+ 'learning_rate': 0.03576}
+I0717 12:26:38.434089 139726263125824 model_lib_v2.py:708] {'Loss/classification_loss': 0.09200573,
+ 'Loss/localization_loss': 0.02399055,
+ 'Loss/regularization_loss': 0.030204987,
+ 'Loss/total_loss': 0.14620127,
+ 'learning_rate': 0.03576}
+INFO:tensorflow:Step 1200 per-step time 0.730s
+I0717 12:27:51.430331 139726263125824 model_lib_v2.py:705] Step 1200 per-step time 0.730s
+INFO:tensorflow:{'Loss/classification_loss': 0.11982433,
+ 'Loss/localization_loss': 0.065620124,
+ 'Loss/regularization_loss': 0.030299844,
+ 'Loss/total_loss': 0.21574429,
+ 'learning_rate': 0.03892}
+I0717 12:27:51.430685 139726263125824 model_lib_v2.py:708] {'Loss/classification_loss': 0.11982433,
+ 'Loss/localization_loss': 0.065620124,
+ 'Loss/regularization_loss': 0.030299844,
+ 'Loss/total_loss': 0.21574429,
+ 'learning_rate': 0.03892}
+INFO:tensorflow:Step 1300 per-step time 0.731s
+I0717 12:29:04.576772 139726263125824 model_lib_v2.py:705] Step 1300 per-step time 0.731s
+INFO:tensorflow:{'Loss/classification_loss': 0.005239387,
+ 'Loss/localization_loss': 0.02390513,
+ 'Loss/regularization_loss': 0.03028874,
+ 'Loss/total_loss': 0.05943326,
+ 'learning_rate': 0.04208}
+I0717 12:29:04.577133 139726263125824 model_lib_v2.py:708] {'Loss/classification_loss': 0.005239387,
+ 'Loss/localization_loss': 0.02390513,
+ 'Loss/regularization_loss': 0.03028874,
+ 'Loss/total_loss': 0.05943326,
+ 'learning_rate': 0.04208}
+INFO:tensorflow:Step 1400 per-step time 0.731s
+I0717 12:30:17.648142 139726263125824 model_lib_v2.py:705] Step 1400 per-step time 0.731s
+INFO:tensorflow:{'Loss/classification_loss': 0.008857351,
+ 'Loss/localization_loss': 0.004257445,
+ 'Loss/regularization_loss': 0.0302769,
+ 'Loss/total_loss': 0.043391697,
+ 'learning_rate': 0.04524}
+I0717 12:30:17.648431 139726263125824 model_lib_v2.py:708] {'Loss/classification_loss': 0.008857351,
+ 'Loss/localization_loss': 0.004257445,
+ 'Loss/regularization_loss': 0.0302769,
+ 'Loss/total_loss': 0.043391697,
+ 'learning_rate': 0.04524}

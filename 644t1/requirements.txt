@@ -1,3 +1,6 @@
+#
+object-detection @ file:///home/paperspace/ml644a/tflib/models/research
+#
 absl-py==1.0.0
 #apache-beam==2.40.0
 argon2-cffi==21.3.0
@@ -85,7 +88,6 @@ notebook==6.4.11
 numpy==1.22.4
 oauth2client==4.1.3
 oauthlib==3.2.0
-object-detection @ file:///home/paperspace/644t1/models/research
 opencv-python==4.6.0.66
 opencv-python-headless==4.6.0.66
 opt-einsum==3.3.0

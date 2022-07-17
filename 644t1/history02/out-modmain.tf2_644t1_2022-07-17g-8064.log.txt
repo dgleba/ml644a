@@ -1,0 +1,143 @@
+Sun Jul 17 12:33:03 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA Quadro M...  On   | 00000000:00:05.0  On |                  N/A |
+| 49%   40C    P8    13W / 120W |    128MiB /  8126MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      1078      G   /usr/lib/xorg/Xorg                 53MiB |
+|    0   N/A  N/A      1578      G   /usr/bin/gnome-shell               70MiB |
++-----------------------------------------------------------------------------+
+Linux psfnd5bcb 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           29Gi       1.0Gi        26Gi        10Mi       2.3Gi        27Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.3 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+udev                          15G     0   15G   0% /dev
+tmpfs                        3.0G  1.6M  3.0G   1% /run
+/dev/mapper/ubuntu--vg-root   50G   29G   19G  61% /
+tmpfs                         15G     0   15G   0% /dev/shm
+tmpfs                        5.0M     0  5.0M   0% /run/lock
+tmpfs                         15G     0   15G   0% /sys/fs/cgroup
+/dev/loop0                    56M   56M     0 100% /snap/core18/2344
+/dev/loop1                    56M   56M     0 100% /snap/core18/2409
+/dev/loop2                    62M   62M     0 100% /snap/core20/1518
+/dev/loop3                    62M   62M     0 100% /snap/core20/1376
+/dev/loop4                    68M   68M     0 100% /snap/lxd/22526
+/dev/loop5                    47M   47M     0 100% /snap/snapd/16292
+/dev/loop6                    44M   44M     0 100% /snap/snapd/15177
+/dev/loop7                    68M   68M     0 100% /snap/lxd/22753
+tmpfs                        3.0G   16K  3.0G   1% /run/user/1000
+2022-07-17 12:33:07.452546: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:07.462231: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:07.463254: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:07.464877: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-17 12:33:07.465679: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:07.466624: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:07.467585: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:08.260238: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:08.260980: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:08.261692: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-17 12:33:08.262327: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 7315 MB memory:  -> device: 0, name: NVIDIA Quadro M4000, pci bus id: 0000:00:05.0, compute capability: 5.2
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+I0717 12:33:08.429963 140380454598464 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+INFO:tensorflow:Maybe overwriting train_steps: 8000
+I0717 12:33:08.435096 140380454598464 config_util.py:552] Maybe overwriting train_steps: 8000
+INFO:tensorflow:Maybe overwriting use_bfloat16: False
+I0717 12:33:08.435283 140380454598464 config_util.py:552] Maybe overwriting use_bfloat16: False
+I0717 12:33:08.443763 140380454598464 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0717 12:33:08.443939 140380454598464 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0717 12:33:08.444057 140380454598464 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0717 12:33:08.448685 140380454598464 efficientnet_model.py:143] round_filter input=32 output=32
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.621439 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.624381 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.628182 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.629277 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.637296 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.641585 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.647846 140380454598464 efficientnet_model.py:143] round_filter input=32 output=32
+I0717 12:33:08.647996 140380454598464 efficientnet_model.py:143] round_filter input=16 output=16
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.664168 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.665296 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.667085 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.668088 140380454598464 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0717 12:33:08.749464 140380454598464 efficientnet_model.py:143] round_filter input=16 output=16
+I0717 12:33:08.749684 140380454598464 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 12:33:09.004700 140380454598464 efficientnet_model.py:143] round_filter input=24 output=24
+I0717 12:33:09.004928 140380454598464 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 12:33:09.277827 140380454598464 efficientnet_model.py:143] round_filter input=40 output=40
+I0717 12:33:09.278044 140380454598464 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 12:33:09.678388 140380454598464 efficientnet_model.py:143] round_filter input=80 output=80
+I0717 12:33:09.678645 140380454598464 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 12:33:10.109693 140380454598464 efficientnet_model.py:143] round_filter input=112 output=112
+I0717 12:33:10.109942 140380454598464 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 12:33:10.675850 140380454598464 efficientnet_model.py:143] round_filter input=192 output=192
+I0717 12:33:10.676295 140380454598464 efficientnet_model.py:143] round_filter input=320 output=320
+I0717 12:33:10.807401 140380454598464 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0717 12:33:10.859604 140380454598464 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+W0717 12:33:10.904303 140380454598464 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+INFO:tensorflow:Reading unweighted datasets: ['../imgdata/ir4/train.record']
+I0717 12:33:10.908219 140380454598464 dataset_builder.py:162] Reading unweighted datasets: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Reading record datasets for input file: ['../imgdata/ir4/train.record']
+I0717 12:33:10.908475 140380454598464 dataset_builder.py:79] Reading record datasets for input file: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Number of filenames to read: 1
+I0717 12:33:10.908596 140380454598464 dataset_builder.py:80] Number of filenames to read: 1
+WARNING:tensorflow:num_readers has been reduced to 1 to match input file shards.
+W0717 12:33:10.908704 140380454598464 dataset_builder.py:86] num_readers has been reduced to 1 to match input file shards.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+W0717 12:33:10.910783 140380454598464 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+W0717 12:33:10.937502 140380454598464 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+W0717 12:33:18.320044 140380454598464 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+WARNING:tensorflow:From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0717 12:33:21.346956 140380454598464 deprecation.py:350] From /home/paperspace/.local/lib/python3.8/site-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2022-07-17 12:34:15.162369: W tensorflow/core/framework/cpu_allocator_impl.cc:82] Allocation of 4872344400 exceeds 10% of free system memory.
+2022-07-17 12:34:18.638366: W tensorflow/core/framework/cpu_allocator_impl.cc:82] Allocation of 4872344400 exceeds 10% of free system memory.

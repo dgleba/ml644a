@@ -1,0 +1,242 @@
+Sun Jul 17 13:10:54 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A100-SXM...  On   | 00000000:00:05.0 Off |                    0 |
+| N/A   24C    P0    40W / 400W |    135MiB / 40536MiB |      0%      Default |
+|                               |                      |             Disabled |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      1195      G   /usr/lib/xorg/Xorg                 60MiB |
+|    0   N/A  N/A      1832      G   /usr/bin/gnome-shell               74MiB |
++-----------------------------------------------------------------------------+
+Linux psdw6rhji 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           88Gi       977Mi        85Gi        11Mi       1.5Gi        86Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.3 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+udev                          45G     0   45G   0% /dev
+tmpfs                        8.9G  1.4M  8.9G   1% /run
+/dev/mapper/ubuntu--vg-root   50G   35G   13G  74% /
+tmpfs                         45G     0   45G   0% /dev/shm
+tmpfs                        5.0M     0  5.0M   0% /run/lock
+tmpfs                         45G     0   45G   0% /sys/fs/cgroup
+/dev/loop0                    56M   56M     0 100% /snap/core18/2344
+/dev/loop1                    62M   62M     0 100% /snap/core20/1376
+/dev/loop2                    56M   56M     0 100% /snap/core18/2409
+/dev/loop3                    62M   62M     0 100% /snap/core20/1518
+/dev/loop5                    68M   68M     0 100% /snap/lxd/22526
+/dev/loop4                    68M   68M     0 100% /snap/lxd/21835
+/dev/loop6                    44M   44M     0 100% /snap/snapd/14978
+/dev/loop7                    44M   44M     0 100% /snap/snapd/15177
+tmpfs                        8.9G   16K  8.9G   1% /run/user/1000
+/dev/loop8                    47M   47M     0 100% /snap/snapd/16292
+ # SSD with EfficientNet-b0 + BiFPN feature extractor,
+# shared box predictor and focal loss (a.k.a EfficientDet-d0).
+# See EfficientDet, Tan et al, https://arxiv.org/abs/1911.09070
+# See Lin et al, https://arxiv.org/abs/1708.02002
+# Trained on COCO, initialized from an EfficientNet-b0 checkpoint.
+#
+# Train on TPU-8
+
+model {
+  ssd {
+    inplace_batchnorm_update: true
+    freeze_batchnorm: false
+    num_classes: 2
+    add_background_class: false
+    box_coder {
+      faster_rcnn_box_coder {
+        y_scale: 10.0
+        x_scale: 10.0
+        height_scale: 5.0
+        width_scale: 5.0
+      }
+    }
+    matcher {
+      argmax_matcher {
+        matched_threshold: 0.5
+        unmatched_threshold: 0.5
+        ignore_thresholds: false
+        negatives_lower_than_unmatched: true
+        force_match_for_each_row: true
+        use_matmul_gather: true
+      }
+    }
+    similarity_calculator {
+      iou_similarity {
+      }
+    }
+    encode_background_as_zeros: true
+    anchor_generator {
+      multiscale_anchor_generator {
+        min_level: 3
+        max_level: 7
+        anchor_scale: 4.0
+        aspect_ratios: [1.0, 2.0, 0.5]
+        scales_per_octave: 3
+      }
+    }
+    image_resizer {
+      keep_aspect_ratio_resizer {
+        min_dimension: 256
+        max_dimension: 896
+        pad_to_max_dimension: true
+        }
+    }
+    box_predictor {
+      weight_shared_convolutional_box_predictor {
+        depth: 64
+        class_prediction_bias_init: -4.6
+        conv_hyperparams {
+          force_use_bias: true
+          activation: SWISH
+          regularizer {
+            l2_regularizer {
+              weight: 0.00004
+            }
+          }
+          initializer {
+            random_normal_initializer {
+              stddev: 0.01
+              mean: 0.0
+            }
+          }
+          batch_norm {
+            scale: true
+            decay: 0.99
+            epsilon: 0.001
+          }
+        }
+        num_layers_before_predictor: 3
+        kernel_size: 3
+        use_depthwise: true
+      }
+    }
+    feature_extractor {
+      type: 'ssd_efficientnet-b0_bifpn_keras'
+      bifpn {
+        min_level: 3
+        max_level: 7
+        num_iterations: 3
+        num_filters: 64
+      }
+      conv_hyperparams {
+        force_use_bias: true
+        activation: SWISH
+        regularizer {
+          l2_regularizer {
+            weight: 0.00004
+          }
+        }
+        initializer {
+          truncated_normal_initializer {
+            stddev: 0.03
+            mean: 0.0
+          }
+        }
+        batch_norm {
+          scale: true,
+          decay: 0.99,
+          epsilon: 0.001,
+        }
+      }
+    }
+    loss {
+      classification_loss {
+        weighted_sigmoid_focal {
+          alpha: 0.25
+          gamma: 1.5
+        }
+      }
+      localization_loss {
+        weighted_smooth_l1 {
+        }
+      }
+      classification_weight: 1.0
+      localization_weight: 1.0
+    }
+    normalize_loss_by_num_matches: true
+    normalize_loc_loss_by_codesize: true
+    post_processing {
+      batch_non_max_suppression {
+        score_threshold: 1e-8
+        iou_threshold: 0.5
+        max_detections_per_class: 100
+        max_total_detections: 100
+      }
+      score_converter: SIGMOID
+    }
+  }
+}
+
+train_config: {
+  fine_tune_checkpoint: "../tflib/efficientdet_d0_coco17_tpu-32/checkpoint/ckpt-0"
+  fine_tune_checkpoint_version: V2
+  fine_tune_checkpoint_type: "detection"
+  batch_size: 1
+  sync_replicas: true
+  startup_delay_steps: 0
+  replicas_to_aggregate: 8
+  use_bfloat16: true
+  num_steps: 8000
+  data_augmentation_options {
+    random_horizontal_flip {
+    }
+  }
+  optimizer {
+    momentum_optimizer: {
+      learning_rate: {
+        cosine_decay_learning_rate {
+          learning_rate_base: 8e-2
+          total_steps: 300000
+          warmup_learning_rate: .001
+          warmup_steps: 2500
+        }
+      }
+      momentum_optimizer_value: 0.9
+    }
+    use_moving_average: false
+  }
+  max_number_of_boxes: 100
+  unpad_groundtruth_tensors: false
+}
+
+train_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/train.record"
+  }
+}
+
+eval_config: {
+  metrics_set: "coco_detection_metrics"
+  use_moving_averages: false
+  batch_size: 1;
+}
+
+eval_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  shuffle: false
+  num_epochs: 1
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/test.record"
+  }
+}
+Traceback (most recent call last):
+  File "../tflib/models/research/object_detection/model_main_tf2.py", line 29, in <module>
+    from absl import flags
+ImportError: No module named absl
