@@ -4,25 +4,9 @@ from setuptools import find_packages
 from setuptools import setup
 
 REQUIRED_PACKAGES = [
-    # Required for apache-beam with PY3
-    'avro-python3',
-    'apache-beam',
-    'pillow',
-    'lxml',
-    'matplotlib',
-    'Cython',
-    'contextlib2',
-    'tf-slim',
-    'six',
-    'pycocotools',
-    'lvis',
-    'scipy',
+    # try to keep current pkgs.
     'pandas',
-    'tf-models-official>=2.5.1',
-    'tensorflow_io',
-    'keras',
-    'pyparsing==2.4.7'  # TODO(b/204103388)
-]
+ ]
 
 setup(
     name='object_detection',

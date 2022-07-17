@@ -1,0 +1,10 @@
+2022-07-17 20:25:16.435985: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
+2022-07-17 20:25:16.436148: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+Traceback (most recent call last):
+  File "/tflib/models/research/object_detection/builders/model_builder_tf2_test.py", line 24, in <module>
+    from object_detection.builders import model_builder
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/builders/model_builder.py", line 23, in <module>
+    from object_detection.builders import anchor_generator_builder
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/builders/anchor_generator_builder.py", line 26, in <module>
+    from object_detection.protos import anchor_generator_pb2
+ImportError: cannot import name 'anchor_generator_pb2' from 'object_detection.protos' (/usr/local/lib/python3.8/dist-packages/object_detection/protos/__init__.py)
