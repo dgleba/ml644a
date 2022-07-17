@@ -14,6 +14,9 @@ cpa:
 	# Copy files from container
 	bash cpa.sh
 
+pipf:
+	docker-compose exec tf 	bash -c " pip freeze>/home/albe/mltf2/requirements.aftertrn$$(date +"__%Y.%m.%d_%b-%a_%H.%M.%S").txt "
+	#docker-compose exec tf 	bash -c " pip freeze "
 
 
 
@@ -39,3 +42,4 @@ inst:
 
 ju:  
 	docker-compose exec pyt bash -c "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/acup --ip 0.0.0.0 --no-browser --allow-root"  
+
