@@ -8,7 +8,7 @@ pipi:
 	docker-compose exec tf bash -c " pip install -r requirements.txt "
 
 otst:
-	docker-compose exec tf bash -c "python /tflib/models/research/object_detection/builders/model_builder_tf2_test.py 2>&1|tee -a \
+	docker-compose exec tf bash -c "python /tf/models/research/object_detection/builders/model_builder_tf2_test.py 2>&1|tee -a \
 	tf2test-out$$(date +"__%Y.%m.%d_%b-%a_%H.%M.%S").txt"
 
 

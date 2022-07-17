@@ -17,7 +17,6 @@ services:
       - ./code:/code
       - ../tflib:/tflib
       - ./outdkr:/outdkr
-      #- ../ir4:/crib/ir4
       - ../imgdata:/imgdata
       - ./home/dot/jupyter:/root/.jupyter
       #- ./home/dot/jupyter:/home/albe/.jupyter

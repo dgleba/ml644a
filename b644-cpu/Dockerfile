@@ -3,8 +3,8 @@ from tensorflow/tensorflow:2.9.1-jupyter
 
 EXPOSE 8888
 
-run mkdir -p /wdir
-workdir /wdir
+# run mkdir -p /wdir
+# workdir /wdir
 
 Run pwd &&  ls -la /tf
 
@@ -21,7 +21,7 @@ RUN groupadd -r albe -g 1000 && useradd -G sudo -u 1000  -m -g albe albe
 #Run pwd && cd /home/albe &&  mkdir -p ./mla && ls -la
 
 
-Run  pwd && cd /out &&  ls -la \
+Run  pwd && cd /tf &&  ls -la \
 &&  mkdir -p protoc \
 &&  curl -SL -o  ./protoc/protoc.zip  https://github.com/protocolbuffers/protobuf/releases/download/v21.2/protoc-21.2-linux-x86_64.zip \
 &&  unzip protoc/protoc.zip -d protoc  && pwd && chmod +x protoc/bin/protoc 
@@ -29,13 +29,13 @@ Run  pwd && cd /out &&  ls -la \
 
 
 # I would like to avoid re pip installing almost everything with this setup....
-workdir /wdir
+# workdir /wdir
 Run pwd \
 && git clone --depth 1 https://github.com/tensorflow/models \
 && cd models/research/ \
+&& /tf/protoc/bin/protoc object_detection/protos/*.proto --python_out=. \
 && cp object_detection/packages/tf2/setup.py . \
-&& python -m pip install . \
-&& /out/protoc/bin/protoc object_detection/protos/*.proto --python_out=. 
+&& python -m pip install . 
 #
 
 
