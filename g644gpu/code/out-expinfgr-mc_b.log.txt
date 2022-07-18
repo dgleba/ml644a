@@ -1,0 +1,53 @@
+2022-07-18 03:08:17.864045: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:17.873096: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:17.874318: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:17.882100: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-18 03:08:17.883163: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:17.884145: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:17.885082: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:18.631973: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:18.632685: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:18.633299: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 03:08:18.633898: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 7303 MB memory:  -> device: 0, name: NVIDIA Quadro M4000, pci bus id: 0000:00:05.0, compute capability: 5.2
+I0718 03:08:18.799571 140630166296384 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0718 03:08:18.799765 140630166296384 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0718 03:08:18.799827 140630166296384 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0718 03:08:18.948595 140630166296384 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 03:08:18.974886 140630166296384 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 03:08:18.975082 140630166296384 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 03:08:19.043938 140630166296384 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 03:08:19.044110 140630166296384 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 03:08:19.219508 140630166296384 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 03:08:19.219685 140630166296384 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 03:08:19.401178 140630166296384 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 03:08:19.401362 140630166296384 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 03:08:19.670361 140630166296384 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 03:08:19.670544 140630166296384 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 03:08:19.950626 140630166296384 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 03:08:19.950823 140630166296384 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 03:08:20.373653 140630166296384 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 03:08:20.373851 140630166296384 efficientnet_model.py:143] round_filter input=320 output=320
+I0718 03:08:20.474781 140630166296384 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0718 03:08:20.517939 140630166296384 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/autograph/impl/api.py:458: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with back_prop=False is deprecated and will be removed in a future version.
+Instructions for updating:
+back_prop=False is deprecated. Consider using tf.stop_gradient instead.
+Instead of:
+results = tf.map_fn(fn, elems, back_prop=False)
+Use:
+results = tf.nest.map_structure(tf.stop_gradient, tf.map_fn(fn, elems))
+W0718 03:08:22.440854 140630166296384 deprecation.py:623] From /usr/local/lib/python3.8/dist-packages/tensorflow/python/autograph/impl/api.py:458: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with back_prop=False is deprecated and will be removed in a future version.
+Instructions for updating:
+back_prop=False is deprecated. Consider using tf.stop_gradient instead.
+Instead of:
+results = tf.map_fn(fn, elems, back_prop=False)
+Use:
+results = tf.nest.map_structure(tf.stop_gradient, tf.map_fn(fn, elems))
+WARNING:tensorflow:Skipping full serialization of Keras layer <object_detection.meta_architectures.ssd_meta_arch.SSDMetaArch object at 0x7fe688115910>, because it is not built.
+W0718 03:08:47.464710 140630166296384 save_impl.py:71] Skipping full serialization of Keras layer <object_detection.meta_architectures.ssd_meta_arch.SSDMetaArch object at 0x7fe688115910>, because it is not built.
+W0718 03:09:34.714678 140630166296384 save.py:233] Found untraced functions such as WeightSharedConvolutionalBoxPredictor_layer_call_fn, WeightSharedConvolutionalBoxPredictor_layer_call_and_return_conditional_losses, WeightSharedConvolutionalBoxHead_layer_call_fn, WeightSharedConvolutionalBoxHead_layer_call_and_return_conditional_losses, WeightSharedConvolutionalClassHead_layer_call_fn while saving (showing 5 of 437). These functions will not be directly callable after loading.
+INFO:tensorflow:Assets written to: interence_graph/saved_model/assets
+I0718 03:09:59.002241 140630166296384 builder_impl.py:779] Assets written to: interence_graph/saved_model/assets
+INFO:tensorflow:Writing pipeline config file to interence_graph/pipeline.config
+I0718 03:10:00.874513 140630166296384 config_util.py:253] Writing pipeline config file to interence_graph/pipeline.config
