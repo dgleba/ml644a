@@ -28,13 +28,13 @@ services:
         - VIRTUAL_PORT=8888
         - LETSENCRYPT_HOST=jpy.172.83.13.116.nip.io,tb.172.83.13.116.nip.io
         - LETSENCRYPT_EMAIL=dgleba@gmail.com
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     command: ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/code --ip 0.0.0.0 --no-browser --allow-root"]  
 
     # keep container running..

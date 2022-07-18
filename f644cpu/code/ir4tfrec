@@ -1,0 +1,15 @@
+
+imgd=/imgdata/ir4
+
+# =================================================
+
+#(test -f $vout && (echo; echo "    ERROR ERROR - Output file already exists, Pick another name. Press Ctrl-c and edit the name..." ; sleep 98765))
+
+
+
+python generate_tfrecord.py --csv_input=$imgd/trainval_labels.csv --image_dir=$imgd/trainval --output_path=$imgd/train.record
+
+python generate_tfrecord.py --csv_input=$imgd/test_labels.csv     --image_dir=$imgd/test     --output_path=$imgd/test.record
+
+
+

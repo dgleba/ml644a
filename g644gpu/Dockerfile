@@ -40,6 +40,8 @@ Run  pwd && curl -SL  http://download.tensorflow.org/models/object_detection/tf2
 
 #add ml639b .
 
+Run pip install protobuf==3.20.*
+
 run pwd && mkdir -p /out && \
   pip freeze> /out/requirements_$(date +"_%Y.%m.%d_%b-%a_%H.%M.%S")-02.txt && \
   pip freeze> /out/requirements02.txt 

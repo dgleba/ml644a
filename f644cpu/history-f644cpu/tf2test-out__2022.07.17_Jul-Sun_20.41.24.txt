@@ -1,0 +1,268 @@
+2022-07-18 00:41:29.846927: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcudart.so.11.0'; dlerror: libcudart.so.11.0: cannot open shared object file: No such file or directory
+2022-07-18 00:41:29.847003: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+Matplotlib is building the font cache; this may take a moment.
+2022-07-18 00:42:04.031730: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory
+2022-07-18 00:42:04.031853: W tensorflow/stream_executor/cuda/cuda_driver.cc:269] failed call to cuInit: UNKNOWN ERROR (303)
+2022-07-18 00:42:04.031936: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (1044a0d0270a): /proc/driver/nvidia/version does not exist
+Running tests under Python 3.8.10: /usr/local/bin/python
+[ RUN      ] ModelBuilderTF2Test.test_create_center_net_deepmac
+/usr/local/lib/python3.8/dist-packages/object_detection/builders/model_builder.py:1102: DeprecationWarning: The 'warn' function is deprecated, use 'warning' instead
+  logging.warn(('Building experimental DeepMAC meta-arch.'
+W0718 00:42:04.823382 139787491903296 model_builder.py:1102] Building experimental DeepMAC meta-arch. Some features may be omitted.
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_center_net_deepmac): 1.42s
+I0718 00:42:05.601491 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_center_net_deepmac): 1.42s
+[       OK ] ModelBuilderTF2Test.test_create_center_net_deepmac
+[ RUN      ] ModelBuilderTF2Test.test_create_center_net_model0 (customize_head_params=True)
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_center_net_model0 (customize_head_params=True)): 2.38s
+I0718 00:42:07.982451 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_center_net_model0 (customize_head_params=True)): 2.38s
+[       OK ] ModelBuilderTF2Test.test_create_center_net_model0 (customize_head_params=True)
+[ RUN      ] ModelBuilderTF2Test.test_create_center_net_model1 (customize_head_params=False)
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_center_net_model1 (customize_head_params=False)): 0.86s
+I0718 00:42:08.839601 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_center_net_model1 (customize_head_params=False)): 0.86s
+[       OK ] ModelBuilderTF2Test.test_create_center_net_model1 (customize_head_params=False)
+[ RUN      ] ModelBuilderTF2Test.test_create_center_net_model_from_keypoints
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_center_net_model_from_keypoints): 0.65s
+I0718 00:42:09.491744 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_center_net_model_from_keypoints): 0.65s
+[       OK ] ModelBuilderTF2Test.test_create_center_net_model_from_keypoints
+[ RUN      ] ModelBuilderTF2Test.test_create_center_net_model_mobilenet
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_center_net_model_mobilenet): 6.36s
+I0718 00:42:15.849831 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_center_net_model_mobilenet): 6.36s
+[       OK ] ModelBuilderTF2Test.test_create_center_net_model_mobilenet
+[ RUN      ] ModelBuilderTF2Test.test_create_experimental_model
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_experimental_model): 0.0s
+I0718 00:42:15.851979 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_experimental_model): 0.0s
+[       OK ] ModelBuilderTF2Test.test_create_experimental_model
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature0 (True)
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature0 (True)): 0.05s
+I0718 00:42:15.900686 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature0 (True)): 0.05s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature0 (True)
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature1 (False)
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature1 (False)): 0.03s
+I0718 00:42:15.941068 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature1 (False)): 0.03s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_from_config_with_crop_feature1 (False)
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_model_from_config_with_example_miner
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_model_from_config_with_example_miner): 0.04s
+I0718 00:42:15.977642 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_model_from_config_with_example_miner): 0.04s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_model_from_config_with_example_miner
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_with_matmul
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_with_matmul): 0.42s
+I0718 00:42:16.400024 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_with_matmul): 0.42s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_with_matmul
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_without_matmul
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_without_matmul): 0.18s
+I0718 00:42:16.583163 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_without_matmul): 0.18s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_faster_rcnn_without_matmul
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_with_matmul
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_with_matmul): 0.19s
+I0718 00:42:16.776400 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_with_matmul): 0.19s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_with_matmul
+[ RUN      ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_without_matmul
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_without_matmul): 0.19s
+I0718 00:42:16.968024 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_without_matmul): 0.19s
+[       OK ] ModelBuilderTF2Test.test_create_faster_rcnn_models_from_config_mask_rcnn_without_matmul
+[ RUN      ] ModelBuilderTF2Test.test_create_rfcn_model_from_config
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_rfcn_model_from_config): 0.19s
+I0718 00:42:17.154416 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_rfcn_model_from_config): 0.19s
+[       OK ] ModelBuilderTF2Test.test_create_rfcn_model_from_config
+[ RUN      ] ModelBuilderTF2Test.test_create_ssd_fpn_model_from_config
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_ssd_fpn_model_from_config): 0.05s
+I0718 00:42:17.209752 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_ssd_fpn_model_from_config): 0.05s
+[       OK ] ModelBuilderTF2Test.test_create_ssd_fpn_model_from_config
+[ RUN      ] ModelBuilderTF2Test.test_create_ssd_models_from_config
+I0718 00:42:17.680274 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0718 00:42:17.680698 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0718 00:42:17.680991 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0718 00:42:17.687174 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:17.743576 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:17.743986 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:17.907398 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:17.907804 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:18.330978 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:18.331292 139787491903296 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 00:42:18.696512 139787491903296 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 00:42:18.696924 139787491903296 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 00:42:19.285908 139787491903296 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 00:42:19.286260 139787491903296 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 00:42:19.830890 139787491903296 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 00:42:19.831224 139787491903296 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 00:42:20.606416 139787491903296 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 00:42:20.606680 139787491903296 efficientnet_model.py:143] round_filter input=320 output=320
+I0718 00:42:20.781325 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0718 00:42:20.864081 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:42:20.973396 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b1
+I0718 00:42:20.973665 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 88
+I0718 00:42:20.973814 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 4
+I0718 00:42:20.977466 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:21.011718 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:21.011970 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:21.299157 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:21.299504 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:21.833132 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:21.833438 139787491903296 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 00:42:22.480772 139787491903296 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 00:42:22.481065 139787491903296 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 00:42:24.184509 139787491903296 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 00:42:24.185214 139787491903296 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 00:42:25.711118 139787491903296 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 00:42:25.711587 139787491903296 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 00:42:27.530088 139787491903296 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 00:42:27.530564 139787491903296 efficientnet_model.py:143] round_filter input=320 output=320
+I0718 00:42:28.301790 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0718 00:42:28.518697 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.1, resolution=240, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:42:28.803706 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b2
+I0718 00:42:28.804245 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 112
+I0718 00:42:28.804817 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 5
+I0718 00:42:28.812279 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:28.874960 139787491903296 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 00:42:28.875517 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:29.645362 139787491903296 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 00:42:29.646124 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:31.239076 139787491903296 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 00:42:31.239533 139787491903296 efficientnet_model.py:143] round_filter input=40 output=48
+I0718 00:42:31.933478 139787491903296 efficientnet_model.py:143] round_filter input=40 output=48
+I0718 00:42:31.933842 139787491903296 efficientnet_model.py:143] round_filter input=80 output=88
+I0718 00:42:33.385250 139787491903296 efficientnet_model.py:143] round_filter input=80 output=88
+I0718 00:42:33.386014 139787491903296 efficientnet_model.py:143] round_filter input=112 output=120
+I0718 00:42:34.886479 139787491903296 efficientnet_model.py:143] round_filter input=112 output=120
+I0718 00:42:34.887242 139787491903296 efficientnet_model.py:143] round_filter input=192 output=208
+I0718 00:42:37.633847 139787491903296 efficientnet_model.py:143] round_filter input=192 output=208
+I0718 00:42:37.634540 139787491903296 efficientnet_model.py:143] round_filter input=320 output=352
+I0718 00:42:38.621988 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=1408
+I0718 00:42:38.798126 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.1, depth_coefficient=1.2, resolution=260, dropout_rate=0.3, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:42:39.128381 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b3
+I0718 00:42:39.128879 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 160
+I0718 00:42:39.129220 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 6
+I0718 00:42:39.136819 139787491903296 efficientnet_model.py:143] round_filter input=32 output=40
+I0718 00:42:39.208124 139787491903296 efficientnet_model.py:143] round_filter input=32 output=40
+I0718 00:42:39.208516 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:39.835929 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:39.836478 139787491903296 efficientnet_model.py:143] round_filter input=24 output=32
+I0718 00:42:40.987893 139787491903296 efficientnet_model.py:143] round_filter input=24 output=32
+I0718 00:42:40.988629 139787491903296 efficientnet_model.py:143] round_filter input=40 output=48
+I0718 00:42:41.687505 139787491903296 efficientnet_model.py:143] round_filter input=40 output=48
+I0718 00:42:41.687938 139787491903296 efficientnet_model.py:143] round_filter input=80 output=96
+I0718 00:42:43.529315 139787491903296 efficientnet_model.py:143] round_filter input=80 output=96
+I0718 00:42:43.529812 139787491903296 efficientnet_model.py:143] round_filter input=112 output=136
+I0718 00:42:45.245807 139787491903296 efficientnet_model.py:143] round_filter input=112 output=136
+I0718 00:42:45.246397 139787491903296 efficientnet_model.py:143] round_filter input=192 output=232
+I0718 00:42:48.125793 139787491903296 efficientnet_model.py:143] round_filter input=192 output=232
+I0718 00:42:48.126475 139787491903296 efficientnet_model.py:143] round_filter input=320 output=384
+I0718 00:42:49.170262 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=1536
+I0718 00:42:49.349682 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.2, depth_coefficient=1.4, resolution=300, dropout_rate=0.3, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:42:49.618374 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b4
+I0718 00:42:49.618950 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 224
+I0718 00:42:49.619233 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 7
+I0718 00:42:49.625598 139787491903296 efficientnet_model.py:143] round_filter input=32 output=48
+I0718 00:42:49.688013 139787491903296 efficientnet_model.py:143] round_filter input=32 output=48
+I0718 00:42:49.688411 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:50.197195 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:50.197917 139787491903296 efficientnet_model.py:143] round_filter input=24 output=32
+I0718 00:42:50.995108 139787491903296 efficientnet_model.py:143] round_filter input=24 output=32
+I0718 00:42:50.995447 139787491903296 efficientnet_model.py:143] round_filter input=40 output=56
+I0718 00:42:52.320207 139787491903296 efficientnet_model.py:143] round_filter input=40 output=56
+I0718 00:42:52.320641 139787491903296 efficientnet_model.py:143] round_filter input=80 output=112
+I0718 00:42:53.523522 139787491903296 efficientnet_model.py:143] round_filter input=80 output=112
+I0718 00:42:53.523784 139787491903296 efficientnet_model.py:143] round_filter input=112 output=160
+I0718 00:42:55.389526 139787491903296 efficientnet_model.py:143] round_filter input=112 output=160
+I0718 00:42:55.389796 139787491903296 efficientnet_model.py:143] round_filter input=192 output=272
+I0718 00:42:57.527362 139787491903296 efficientnet_model.py:143] round_filter input=192 output=272
+I0718 00:42:57.527898 139787491903296 efficientnet_model.py:143] round_filter input=320 output=448
+I0718 00:42:58.296396 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=1792
+I0718 00:42:58.452538 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.4, depth_coefficient=1.8, resolution=380, dropout_rate=0.4, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:42:58.753294 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b5
+I0718 00:42:58.753714 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 288
+I0718 00:42:58.753990 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 7
+I0718 00:42:58.760620 139787491903296 efficientnet_model.py:143] round_filter input=32 output=48
+I0718 00:42:58.822091 139787491903296 efficientnet_model.py:143] round_filter input=32 output=48
+I0718 00:42:58.822485 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:59.296742 139787491903296 efficientnet_model.py:143] round_filter input=16 output=24
+I0718 00:42:59.296997 139787491903296 efficientnet_model.py:143] round_filter input=24 output=40
+I0718 00:43:00.732419 139787491903296 efficientnet_model.py:143] round_filter input=24 output=40
+I0718 00:43:00.733118 139787491903296 efficientnet_model.py:143] round_filter input=40 output=64
+I0718 00:43:02.431331 139787491903296 efficientnet_model.py:143] round_filter input=40 output=64
+I0718 00:43:02.431898 139787491903296 efficientnet_model.py:143] round_filter input=80 output=128
+I0718 00:43:04.143578 139787491903296 efficientnet_model.py:143] round_filter input=80 output=128
+I0718 00:43:04.143989 139787491903296 efficientnet_model.py:143] round_filter input=112 output=176
+I0718 00:43:06.631818 139787491903296 efficientnet_model.py:143] round_filter input=112 output=176
+I0718 00:43:06.632295 139787491903296 efficientnet_model.py:143] round_filter input=192 output=304
+I0718 00:43:09.214065 139787491903296 efficientnet_model.py:143] round_filter input=192 output=304
+I0718 00:43:09.214477 139787491903296 efficientnet_model.py:143] round_filter input=320 output=512
+I0718 00:43:09.948915 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=2048
+I0718 00:43:10.057235 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.6, depth_coefficient=2.2, resolution=456, dropout_rate=0.4, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:43:10.369302 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b6
+I0718 00:43:10.369673 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 384
+I0718 00:43:10.369987 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 8
+I0718 00:43:10.379033 139787491903296 efficientnet_model.py:143] round_filter input=32 output=56
+I0718 00:43:10.422930 139787491903296 efficientnet_model.py:143] round_filter input=32 output=56
+I0718 00:43:10.423258 139787491903296 efficientnet_model.py:143] round_filter input=16 output=32
+I0718 00:43:11.086284 139787491903296 efficientnet_model.py:143] round_filter input=16 output=32
+I0718 00:43:11.086733 139787491903296 efficientnet_model.py:143] round_filter input=24 output=40
+I0718 00:43:12.563540 139787491903296 efficientnet_model.py:143] round_filter input=24 output=40
+I0718 00:43:12.564082 139787491903296 efficientnet_model.py:143] round_filter input=40 output=72
+I0718 00:43:13.654190 139787491903296 efficientnet_model.py:143] round_filter input=40 output=72
+I0718 00:43:13.654613 139787491903296 efficientnet_model.py:143] round_filter input=80 output=144
+I0718 00:43:15.375999 139787491903296 efficientnet_model.py:143] round_filter input=80 output=144
+I0718 00:43:15.376271 139787491903296 efficientnet_model.py:143] round_filter input=112 output=200
+I0718 00:43:17.944543 139787491903296 efficientnet_model.py:143] round_filter input=112 output=200
+I0718 00:43:17.945360 139787491903296 efficientnet_model.py:143] round_filter input=192 output=344
+I0718 00:43:22.109270 139787491903296 efficientnet_model.py:143] round_filter input=192 output=344
+I0718 00:43:22.109747 139787491903296 efficientnet_model.py:143] round_filter input=320 output=576
+I0718 00:43:23.816898 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=2304
+I0718 00:43:24.051342 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.8, depth_coefficient=2.6, resolution=528, dropout_rate=0.5, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+I0718 00:43:24.678040 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b7
+I0718 00:43:24.678788 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 384
+I0718 00:43:24.679494 139787491903296 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 8
+I0718 00:43:24.692511 139787491903296 efficientnet_model.py:143] round_filter input=32 output=64
+I0718 00:43:24.790909 139787491903296 efficientnet_model.py:143] round_filter input=32 output=64
+I0718 00:43:24.791614 139787491903296 efficientnet_model.py:143] round_filter input=16 output=32
+I0718 00:43:25.470413 139787491903296 efficientnet_model.py:143] round_filter input=16 output=32
+I0718 00:43:25.470777 139787491903296 efficientnet_model.py:143] round_filter input=24 output=48
+I0718 00:43:27.003915 139787491903296 efficientnet_model.py:143] round_filter input=24 output=48
+I0718 00:43:27.004895 139787491903296 efficientnet_model.py:143] round_filter input=40 output=80
+I0718 00:43:30.076095 139787491903296 efficientnet_model.py:143] round_filter input=40 output=80
+I0718 00:43:30.076545 139787491903296 efficientnet_model.py:143] round_filter input=80 output=160
+I0718 00:43:33.860080 139787491903296 efficientnet_model.py:143] round_filter input=80 output=160
+I0718 00:43:33.860663 139787491903296 efficientnet_model.py:143] round_filter input=112 output=224
+I0718 00:43:38.121655 139787491903296 efficientnet_model.py:143] round_filter input=112 output=224
+I0718 00:43:38.124923 139787491903296 efficientnet_model.py:143] round_filter input=192 output=384
+I0718 00:43:42.932968 139787491903296 efficientnet_model.py:143] round_filter input=192 output=384
+I0718 00:43:42.933352 139787491903296 efficientnet_model.py:143] round_filter input=320 output=640
+I0718 00:43:44.571018 139787491903296 efficientnet_model.py:143] round_filter input=1280 output=2560
+I0718 00:43:44.667673 139787491903296 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=2.0, depth_coefficient=3.1, resolution=600, dropout_rate=0.5, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_create_ssd_models_from_config): 87.69s
+I0718 00:43:44.904211 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_create_ssd_models_from_config): 87.69s
+[       OK ] ModelBuilderTF2Test.test_create_ssd_models_from_config
+[ RUN      ] ModelBuilderTF2Test.test_invalid_faster_rcnn_batchnorm_update
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_invalid_faster_rcnn_batchnorm_update): 0.0s
+I0718 00:43:44.922125 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_invalid_faster_rcnn_batchnorm_update): 0.0s
+[       OK ] ModelBuilderTF2Test.test_invalid_faster_rcnn_batchnorm_update
+[ RUN      ] ModelBuilderTF2Test.test_invalid_first_stage_nms_iou_threshold
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_invalid_first_stage_nms_iou_threshold): 0.0s
+I0718 00:43:44.926341 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_invalid_first_stage_nms_iou_threshold): 0.0s
+[       OK ] ModelBuilderTF2Test.test_invalid_first_stage_nms_iou_threshold
+[ RUN      ] ModelBuilderTF2Test.test_invalid_model_config_proto
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_invalid_model_config_proto): 0.0s
+I0718 00:43:44.927504 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_invalid_model_config_proto): 0.0s
+[       OK ] ModelBuilderTF2Test.test_invalid_model_config_proto
+[ RUN      ] ModelBuilderTF2Test.test_invalid_second_stage_batch_size
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_invalid_second_stage_batch_size): 0.0s
+I0718 00:43:44.931089 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_invalid_second_stage_batch_size): 0.0s
+[       OK ] ModelBuilderTF2Test.test_invalid_second_stage_batch_size
+[ RUN      ] ModelBuilderTF2Test.test_session
+[  SKIPPED ] ModelBuilderTF2Test.test_session
+[ RUN      ] ModelBuilderTF2Test.test_unknown_faster_rcnn_feature_extractor
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_unknown_faster_rcnn_feature_extractor): 0.0s
+I0718 00:43:44.934590 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_unknown_faster_rcnn_feature_extractor): 0.0s
+[       OK ] ModelBuilderTF2Test.test_unknown_faster_rcnn_feature_extractor
+[ RUN      ] ModelBuilderTF2Test.test_unknown_meta_architecture
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_unknown_meta_architecture): 0.0s
+I0718 00:43:44.935607 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_unknown_meta_architecture): 0.0s
+[       OK ] ModelBuilderTF2Test.test_unknown_meta_architecture
+[ RUN      ] ModelBuilderTF2Test.test_unknown_ssd_feature_extractor
+INFO:tensorflow:time(__main__.ModelBuilderTF2Test.test_unknown_ssd_feature_extractor): 0.0s
+I0718 00:43:44.938044 139787491903296 test_util.py:2458] time(__main__.ModelBuilderTF2Test.test_unknown_ssd_feature_extractor): 0.0s
+[       OK ] ModelBuilderTF2Test.test_unknown_ssd_feature_extractor
+----------------------------------------------------------------------
+Ran 24 tests in 100.894s
+
+OK (skipped=1)

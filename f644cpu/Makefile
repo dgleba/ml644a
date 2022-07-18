@@ -2,7 +2,12 @@
 # One liners and simple stuff may be here in this makefile. See sc folder for scripts.
 
 mcp:
+	# tfrecord
 	docker-compose exec tf 	bash amcprep
+
+ir4tfrec:
+	# tfrecord
+	docker-compose exec tf 	bash ir4tfrec
 
 pipi:
 	docker-compose exec tf bash -c " pip install -r requirements.txt "
