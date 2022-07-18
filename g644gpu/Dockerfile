@@ -1,5 +1,5 @@
-# from tensorflow/tensorflow:2.9.1-gpu-jupyter
-from tensorflow/tensorflow:2.9.1-jupyter
+from tensorflow/tensorflow:2.9.1-gpu-jupyter
+# from tensorflow/tensorflow:2.9.1-jupyter
 
 EXPOSE 8888
 
@@ -37,9 +37,6 @@ Run pwd &&  ls -la /tf
 
 Run  pwd && curl -SL  http://download.tensorflow.org/models/object_detection/tf2/20200711/efficientdet_d0_coco17_tpu-32.tar.gz -o ./efficientdet.tgz \ 
 && tar -xf efficientdet.tgz && pwd
-
-Run pip install protobuf==3.20.*
-
 
 #add ml639b .
 
