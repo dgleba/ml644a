@@ -1,0 +1,702 @@
+Mon Jul 18 02:15:08 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA Quadro M...  On   | 00000000:00:05.0  On |                  N/A |
+| 46%   27C    P8    13W / 120W |    141MiB /  8126MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
+Linux 743a36bd6dfd 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           29Gi       1.2Gi        18Gi        11Mi       9.4Gi        27Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.4 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+overlay                       50G   36G   12G  75% /
+tmpfs                         64M     0   64M   0% /dev
+tmpfs                         15G     0   15G   0% /sys/fs/cgroup
+shm                           64G     0   64G   0% /dev/shm
+/dev/mapper/ubuntu--vg-root   50G   36G   12G  75% /code
+tmpfs                         15G   12K   15G   1% /proc/driver/nvidia
+tmpfs                        3.0G  1.7M  3.0G   1% /run/nvidia-persistenced/socket
+udev                          15G     0   15G   0% /dev/nvidia0
+tmpfs                         15G     0   15G   0% /proc/acpi
+tmpfs                         15G     0   15G   0% /proc/scsi
+tmpfs                         15G     0   15G   0% /sys/firmware
+ # SSD with EfficientNet-b0 + BiFPN feature extractor,
+# shared box predictor and focal loss (a.k.a EfficientDet-d0).
+# See EfficientDet, Tan et al, https://arxiv.org/abs/1911.09070
+# See Lin et al, https://arxiv.org/abs/1708.02002
+# Trained on COCO, initialized from an EfficientNet-b0 checkpoint.
+#
+# Train on TPU-8
+
+model {
+  ssd {
+    inplace_batchnorm_update: true
+    freeze_batchnorm: false
+    num_classes: 2
+    add_background_class: false
+    box_coder {
+      faster_rcnn_box_coder {
+        y_scale: 10.0
+        x_scale: 10.0
+        height_scale: 5.0
+        width_scale: 5.0
+      }
+    }
+    matcher {
+      argmax_matcher {
+        matched_threshold: 0.5
+        unmatched_threshold: 0.5
+        ignore_thresholds: false
+        negatives_lower_than_unmatched: true
+        force_match_for_each_row: true
+        use_matmul_gather: true
+      }
+    }
+    similarity_calculator {
+      iou_similarity {
+      }
+    }
+    encode_background_as_zeros: true
+    anchor_generator {
+      multiscale_anchor_generator {
+        min_level: 3
+        max_level: 7
+        anchor_scale: 4.0
+        aspect_ratios: [1.0, 2.0, 0.5]
+        scales_per_octave: 3
+      }
+    }
+    image_resizer {
+      keep_aspect_ratio_resizer {
+        min_dimension: 640
+        max_dimension: 896
+        pad_to_max_dimension: true
+        }
+    }
+    box_predictor {
+      weight_shared_convolutional_box_predictor {
+        depth: 64
+        class_prediction_bias_init: -4.6
+        conv_hyperparams {
+          force_use_bias: true
+          activation: SWISH
+          regularizer {
+            l2_regularizer {
+              weight: 0.00004
+            }
+          }
+          initializer {
+            random_normal_initializer {
+              stddev: 0.01
+              mean: 0.0
+            }
+          }
+          batch_norm {
+            scale: true
+            decay: 0.99
+            epsilon: 0.001
+          }
+        }
+        num_layers_before_predictor: 3
+        kernel_size: 3
+        use_depthwise: true
+      }
+    }
+    feature_extractor {
+      type: 'ssd_efficientnet-b0_bifpn_keras'
+      bifpn {
+        min_level: 3
+        max_level: 7
+        num_iterations: 3
+        num_filters: 64
+      }
+      conv_hyperparams {
+        force_use_bias: true
+        activation: SWISH
+        regularizer {
+          l2_regularizer {
+            weight: 0.00004
+          }
+        }
+        initializer {
+          truncated_normal_initializer {
+            stddev: 0.03
+            mean: 0.0
+          }
+        }
+        batch_norm {
+          scale: true,
+          decay: 0.99,
+          epsilon: 0.001,
+        }
+      }
+    }
+    loss {
+      classification_loss {
+        weighted_sigmoid_focal {
+          alpha: 0.25
+          gamma: 1.5
+        }
+      }
+      localization_loss {
+        weighted_smooth_l1 {
+        }
+      }
+      classification_weight: 1.0
+      localization_weight: 1.0
+    }
+    normalize_loss_by_num_matches: true
+    normalize_loc_loss_by_codesize: true
+    post_processing {
+      batch_non_max_suppression {
+        score_threshold: 1e-8
+        iou_threshold: 0.5
+        max_detections_per_class: 100
+        max_total_detections: 100
+      }
+      score_converter: SIGMOID
+    }
+  }
+}
+
+train_config: {
+  fine_tune_checkpoint: "../tflib/efficientdet_d0_coco17_tpu-32/checkpoint/ckpt-0"
+  fine_tune_checkpoint_version: V2
+  fine_tune_checkpoint_type: "detection"
+  batch_size: 1
+  sync_replicas: true
+  startup_delay_steps: 0
+  replicas_to_aggregate: 8
+  use_bfloat16: true
+  num_steps: 8000
+  data_augmentation_options {
+    random_horizontal_flip {
+    }
+  }
+  optimizer {
+    momentum_optimizer: {
+      learning_rate: {
+        cosine_decay_learning_rate {
+          learning_rate_base: 8e-2
+          total_steps: 300000
+          warmup_learning_rate: .001
+          warmup_steps: 2500
+        }
+      }
+      momentum_optimizer_value: 0.9
+    }
+    use_moving_average: false
+  }
+  max_number_of_boxes: 100
+  unpad_groundtruth_tensors: false
+}
+
+train_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/train.record"
+  }
+}
+
+eval_config: {
+  metrics_set: "coco_detection_metrics"
+  use_moving_averages: false
+  batch_size: 1;
+}
+
+eval_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  shuffle: false
+  num_epochs: 1
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/test.record"
+  }
+}
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   46 bits physical, 48 bits virtual
+CPU(s):                          8
+On-line CPU(s) list:             0-7
+Thread(s) per core:              1
+Core(s) per socket:              8
+Socket(s):                       1
+NUMA node(s):                    1
+Vendor ID:                       GenuineIntel
+CPU family:                      6
+Model:                           79
+Model name:                      Intel(R) Xeon(R) CPU E5-2623 v4 @ 2.60GHz
+Stepping:                        1
+CPU MHz:                         2600.051
+BogoMIPS:                        5200.02
+Hypervisor vendor:               Xen
+Virtualization type:             full
+L1d cache:                       256 KiB
+L1i cache:                       256 KiB
+L2 cache:                        2 MiB
+L3 cache:                        80 MiB
+NUMA node0 CPU(s):               0-7
+Vulnerability Itlb multihit:     KVM: Vulnerable
+Vulnerability L1tf:              Mitigation; PTE Inversion
+Vulnerability Mds:               Mitigation; Clear CPU buffers; SMT Host state unknown
+Vulnerability Meltdown:          Mitigation; PTI
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP disabled, RSB filling
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush acpi mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti intel_ppin ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap xsaveopt md_clear flush_l1d
+2022-07-18 02:15:13.107350: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.119506: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.120628: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.122355: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-18 02:15:13.123431: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.124487: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.125394: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.969420: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.970244: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.970919: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:15:13.971470: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 7303 MB memory:  -> device: 0, name: NVIDIA Quadro M4000, pci bus id: 0000:00:05.0, compute capability: 5.2
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+I0718 02:15:14.153412 140473242101568 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+INFO:tensorflow:Maybe overwriting train_steps: 8000
+I0718 02:15:14.158230 140473242101568 config_util.py:552] Maybe overwriting train_steps: 8000
+INFO:tensorflow:Maybe overwriting use_bfloat16: False
+I0718 02:15:14.158395 140473242101568 config_util.py:552] Maybe overwriting use_bfloat16: False
+I0718 02:15:14.168078 140473242101568 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0718 02:15:14.168300 140473242101568 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0718 02:15:14.168381 140473242101568 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0718 02:15:14.174277 140473242101568 efficientnet_model.py:143] round_filter input=32 output=32
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.200162 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.202595 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.205626 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.206768 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.215013 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.219624 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.226519 140473242101568 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 02:15:14.226650 140473242101568 efficientnet_model.py:143] round_filter input=16 output=16
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.244890 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.246237 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.248737 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.249898 140473242101568 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:15:14.347156 140473242101568 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 02:15:14.347359 140473242101568 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 02:15:14.693326 140473242101568 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 02:15:14.693519 140473242101568 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 02:15:15.037174 140473242101568 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 02:15:15.037415 140473242101568 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 02:15:15.523216 140473242101568 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 02:15:15.523438 140473242101568 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 02:15:16.003665 140473242101568 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 02:15:16.003906 140473242101568 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 02:15:16.646655 140473242101568 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 02:15:16.646849 140473242101568 efficientnet_model.py:143] round_filter input=320 output=320
+I0718 02:15:16.805314 140473242101568 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0718 02:15:16.871516 140473242101568 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+W0718 02:15:16.931366 140473242101568 deprecation.py:350] From /usr/local/lib/python3.8/dist-packages/object_detection/model_lib_v2.py:563: StrategyBase.experimental_distribute_datasets_from_function (from tensorflow.python.distribute.distribute_lib) is deprecated and will be removed in a future version.
+Instructions for updating:
+rename to distribute_datasets_from_function
+INFO:tensorflow:Reading unweighted datasets: ['../imgdata/ir4/train.record']
+I0718 02:15:16.945521 140473242101568 dataset_builder.py:162] Reading unweighted datasets: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Reading record datasets for input file: ['../imgdata/ir4/train.record']
+I0718 02:15:16.947843 140473242101568 dataset_builder.py:79] Reading record datasets for input file: ['../imgdata/ir4/train.record']
+INFO:tensorflow:Number of filenames to read: 1
+I0718 02:15:16.947931 140473242101568 dataset_builder.py:80] Number of filenames to read: 1
+WARNING:tensorflow:num_readers has been reduced to 1 to match input file shards.
+W0718 02:15:16.948031 140473242101568 dataset_builder.py:86] num_readers has been reduced to 1 to match input file shards.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+W0718 02:15:16.957011 140473242101568 deprecation.py:350] From /usr/local/lib/python3.8/dist-packages/object_detection/builders/dataset_builder.py:100: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.deterministic`.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+W0718 02:15:17.064053 140473242101568 deprecation.py:350] From /usr/local/lib/python3.8/dist-packages/object_detection/builders/dataset_builder.py:235: DatasetV1.map_with_legacy_function (from tensorflow.python.data.ops.dataset_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map()
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+W0718 02:15:26.623094 140473242101568 deprecation.py:350] From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1082: sparse_to_dense (from tensorflow.python.ops.sparse_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Create a `tf.sparse.SparseTensor` and use `tf.sparse.to_dense` instead.
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0718 02:15:30.472553 140473242101568 deprecation.py:350] From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/dispatch.py:1082: to_float (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2022-07-18 02:16:06.370295: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+/usr/local/lib/python3.8/dist-packages/keras/backend.py:450: UserWarning: `tf.keras.backend.set_learning_phase` is deprecated and will be removed after 2020-10-11. To update it, simply pass a True/False value to the `training` argument of the `__call__` method of your layer or model.
+  warnings.warn('`tf.keras.backend.set_learning_phase` is deprecated and '
+WARNING:tensorflow:From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:629: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Use fn_output_signature instead
+W0718 02:16:19.770828 140467404302080 deprecation.py:554] From /usr/local/lib/python3.8/dist-packages/tensorflow/python/util/deprecation.py:629: calling map_fn_v2 (from tensorflow.python.ops.map_fn) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Use fn_output_signature instead
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0718 02:16:29.548923 140467404302080 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0718 02:16:43.465460 140467404302080 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0718 02:16:56.630259 140467404302080 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+WARNING:tensorflow:Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+W0718 02:17:10.232099 140467404302080 utils.py:76] Gradients do not exist for variables ['top_bn/gamma:0', 'top_bn/beta:0'] when minimizing the loss. If you're using `model.compile()`, did you forget to provide a `loss`argument?
+INFO:tensorflow:Step 100 per-step time 1.533s
+I0718 02:18:52.574031 140473242101568 model_lib_v2.py:705] Step 100 per-step time 1.533s
+INFO:tensorflow:{'Loss/classification_loss': 1.7526505,
+ 'Loss/localization_loss': 0.071653396,
+ 'Loss/regularization_loss': 0.028535433,
+ 'Loss/total_loss': 1.8528394,
+ 'learning_rate': 0.00416}
+I0718 02:18:52.574389 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 1.7526505,
+ 'Loss/localization_loss': 0.071653396,
+ 'Loss/regularization_loss': 0.028535433,
+ 'Loss/total_loss': 1.8528394,
+ 'learning_rate': 0.00416}
+INFO:tensorflow:Step 200 per-step time 0.711s
+I0718 02:20:03.617585 140473242101568 model_lib_v2.py:705] Step 200 per-step time 0.711s
+INFO:tensorflow:{'Loss/classification_loss': 1.550672,
+ 'Loss/localization_loss': 0.57137513,
+ 'Loss/regularization_loss': 0.028670805,
+ 'Loss/total_loss': 2.150718,
+ 'learning_rate': 0.0073200003}
+I0718 02:20:03.617893 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 1.550672,
+ 'Loss/localization_loss': 0.57137513,
+ 'Loss/regularization_loss': 0.028670805,
+ 'Loss/total_loss': 2.150718,
+ 'learning_rate': 0.0073200003}
+INFO:tensorflow:Step 300 per-step time 0.708s
+I0718 02:21:14.452976 140473242101568 model_lib_v2.py:705] Step 300 per-step time 0.708s
+INFO:tensorflow:{'Loss/classification_loss': 0.7276939,
+ 'Loss/localization_loss': 0.06009245,
+ 'Loss/regularization_loss': 0.028858976,
+ 'Loss/total_loss': 0.8166453,
+ 'learning_rate': 0.010480001}
+I0718 02:21:14.453472 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.7276939,
+ 'Loss/localization_loss': 0.06009245,
+ 'Loss/regularization_loss': 0.028858976,
+ 'Loss/total_loss': 0.8166453,
+ 'learning_rate': 0.010480001}
+INFO:tensorflow:Step 400 per-step time 0.709s
+I0718 02:22:25.349084 140473242101568 model_lib_v2.py:705] Step 400 per-step time 0.709s
+INFO:tensorflow:{'Loss/classification_loss': 0.68327683,
+ 'Loss/localization_loss': 0.035360605,
+ 'Loss/regularization_loss': 0.029045966,
+ 'Loss/total_loss': 0.7476834,
+ 'learning_rate': 0.0136400005}
+I0718 02:22:25.349650 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.68327683,
+ 'Loss/localization_loss': 0.035360605,
+ 'Loss/regularization_loss': 0.029045966,
+ 'Loss/total_loss': 0.7476834,
+ 'learning_rate': 0.0136400005}
+INFO:tensorflow:Step 500 per-step time 0.710s
+I0718 02:23:36.359464 140473242101568 model_lib_v2.py:705] Step 500 per-step time 0.710s
+INFO:tensorflow:{'Loss/classification_loss': 0.17231567,
+ 'Loss/localization_loss': 0.008046706,
+ 'Loss/regularization_loss': 0.029127244,
+ 'Loss/total_loss': 0.20948961,
+ 'learning_rate': 0.016800001}
+I0718 02:23:36.360013 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.17231567,
+ 'Loss/localization_loss': 0.008046706,
+ 'Loss/regularization_loss': 0.029127244,
+ 'Loss/total_loss': 0.20948961,
+ 'learning_rate': 0.016800001}
+INFO:tensorflow:Step 600 per-step time 0.710s
+I0718 02:24:47.365260 140473242101568 model_lib_v2.py:705] Step 600 per-step time 0.710s
+INFO:tensorflow:{'Loss/classification_loss': 0.5641251,
+ 'Loss/localization_loss': 0.14131142,
+ 'Loss/regularization_loss': 0.030100232,
+ 'Loss/total_loss': 0.73553675,
+ 'learning_rate': 0.019960001}
+I0718 02:24:47.365907 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.5641251,
+ 'Loss/localization_loss': 0.14131142,
+ 'Loss/regularization_loss': 0.030100232,
+ 'Loss/total_loss': 0.73553675,
+ 'learning_rate': 0.019960001}
+INFO:tensorflow:Step 700 per-step time 0.708s
+I0718 02:25:58.152699 140473242101568 model_lib_v2.py:705] Step 700 per-step time 0.708s
+INFO:tensorflow:{'Loss/classification_loss': 0.2220403,
+ 'Loss/localization_loss': 0.08889663,
+ 'Loss/regularization_loss': 0.03023122,
+ 'Loss/total_loss': 0.34116814,
+ 'learning_rate': 0.023120001}
+I0718 02:25:58.153372 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.2220403,
+ 'Loss/localization_loss': 0.08889663,
+ 'Loss/regularization_loss': 0.03023122,
+ 'Loss/total_loss': 0.34116814,
+ 'learning_rate': 0.023120001}
+INFO:tensorflow:Step 800 per-step time 0.709s
+I0718 02:27:09.038519 140473242101568 model_lib_v2.py:705] Step 800 per-step time 0.709s
+INFO:tensorflow:{'Loss/classification_loss': 0.16809629,
+ 'Loss/localization_loss': 0.031834174,
+ 'Loss/regularization_loss': 0.03026797,
+ 'Loss/total_loss': 0.23019843,
+ 'learning_rate': 0.02628}
+I0718 02:27:09.039082 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.16809629,
+ 'Loss/localization_loss': 0.031834174,
+ 'Loss/regularization_loss': 0.03026797,
+ 'Loss/total_loss': 0.23019843,
+ 'learning_rate': 0.02628}
+INFO:tensorflow:Step 900 per-step time 0.707s
+I0718 02:28:19.702460 140473242101568 model_lib_v2.py:705] Step 900 per-step time 0.707s
+INFO:tensorflow:{'Loss/classification_loss': 0.14290908,
+ 'Loss/localization_loss': 0.022011831,
+ 'Loss/regularization_loss': 0.030300912,
+ 'Loss/total_loss': 0.19522183,
+ 'learning_rate': 0.02944}
+I0718 02:28:19.702959 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': 0.14290908,
+ 'Loss/localization_loss': 0.022011831,
+ 'Loss/regularization_loss': 0.030300912,
+ 'Loss/total_loss': 0.19522183,
+ 'learning_rate': 0.02944}
+INFO:tensorflow:Step 1000 per-step time 0.709s
+I0718 02:29:30.620282 140473242101568 model_lib_v2.py:705] Step 1000 per-step time 0.709s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.0326}
+I0718 02:29:30.620769 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.0326}
+INFO:tensorflow:Step 1100 per-step time 0.723s
+I0718 02:30:42.919704 140473242101568 model_lib_v2.py:705] Step 1100 per-step time 0.723s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.03576}
+I0718 02:30:42.920217 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.03576}
+INFO:tensorflow:Step 1200 per-step time 0.715s
+I0718 02:31:54.436560 140473242101568 model_lib_v2.py:705] Step 1200 per-step time 0.715s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.03892}
+I0718 02:31:54.437030 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.03892}
+INFO:tensorflow:Step 1300 per-step time 0.714s
+I0718 02:33:05.825645 140473242101568 model_lib_v2.py:705] Step 1300 per-step time 0.714s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.04208}
+I0718 02:33:05.825987 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.04208}
+INFO:tensorflow:Step 1400 per-step time 0.712s
+I0718 02:34:16.997934 140473242101568 model_lib_v2.py:705] Step 1400 per-step time 0.712s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.04524}
+I0718 02:34:16.998357 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.04524}
+INFO:tensorflow:Step 1500 per-step time 0.713s
+I0718 02:35:28.306392 140473242101568 model_lib_v2.py:705] Step 1500 per-step time 0.713s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.0484}
+I0718 02:35:28.306811 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.0484}
+INFO:tensorflow:Step 1600 per-step time 0.713s
+I0718 02:36:39.652534 140473242101568 model_lib_v2.py:705] Step 1600 per-step time 0.713s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05156}
+I0718 02:36:39.652890 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05156}
+INFO:tensorflow:Step 1700 per-step time 0.713s
+I0718 02:37:50.998364 140473242101568 model_lib_v2.py:705] Step 1700 per-step time 0.713s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05472}
+I0718 02:37:50.998699 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05472}
+INFO:tensorflow:Step 1800 per-step time 0.712s
+I0718 02:39:02.231397 140473242101568 model_lib_v2.py:705] Step 1800 per-step time 0.712s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05788}
+I0718 02:39:02.231830 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.05788}
+INFO:tensorflow:Step 1900 per-step time 0.711s
+I0718 02:40:13.285257 140473242101568 model_lib_v2.py:705] Step 1900 per-step time 0.711s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.06104}
+I0718 02:40:13.285669 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.06104}
+INFO:tensorflow:Step 2000 per-step time 0.711s
+I0718 02:41:24.396540 140473242101568 model_lib_v2.py:705] Step 2000 per-step time 0.711s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.06420001}
+I0718 02:41:24.396947 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.06420001}
+INFO:tensorflow:Step 2100 per-step time 0.721s
+I0718 02:42:36.465127 140473242101568 model_lib_v2.py:705] Step 2100 per-step time 0.721s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.067360006}
+I0718 02:42:36.465732 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.067360006}
+INFO:tensorflow:Step 2200 per-step time 0.710s
+I0718 02:43:47.440675 140473242101568 model_lib_v2.py:705] Step 2200 per-step time 0.710s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.070520006}
+I0718 02:43:47.441279 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.070520006}
+INFO:tensorflow:Step 2300 per-step time 0.709s
+I0718 02:44:58.328743 140473242101568 model_lib_v2.py:705] Step 2300 per-step time 0.709s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.073680006}
+I0718 02:44:58.329307 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.073680006}
+INFO:tensorflow:Step 2400 per-step time 0.703s
+I0718 02:46:08.667218 140473242101568 model_lib_v2.py:705] Step 2400 per-step time 0.703s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.076840006}
+I0718 02:46:08.668145 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.076840006}
+INFO:tensorflow:Step 2500 per-step time 0.709s
+I0718 02:47:19.541794 140473242101568 model_lib_v2.py:705] Step 2500 per-step time 0.709s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.08}
+I0718 02:47:19.542737 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.08}
+INFO:tensorflow:Step 2600 per-step time 0.702s
+I0718 02:48:29.775733 140473242101568 model_lib_v2.py:705] Step 2600 per-step time 0.702s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.079999976}
+I0718 02:48:29.776298 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.079999976}
+INFO:tensorflow:Step 2700 per-step time 0.702s
+I0718 02:49:39.952190 140473242101568 model_lib_v2.py:705] Step 2700 per-step time 0.702s
+INFO:tensorflow:{'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.07999991}
+I0718 02:49:39.952587 140473242101568 model_lib_v2.py:708] {'Loss/classification_loss': nan,
+ 'Loss/localization_loss': nan,
+ 'Loss/regularization_loss': nan,
+ 'Loss/total_loss': nan,
+ 'learning_rate': 0.07999991}

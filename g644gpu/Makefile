@@ -1,7 +1,12 @@
 
 # One liners and simple stuff may be here in this makefile. See sc folder for scripts.
 
+trn:
+	# tfrecord
+	docker-compose exec tf 	bash train-microc
+
 mcp:
+	# tfrecord
 	docker-compose exec tf 	bash amcprep
 
 pipi:

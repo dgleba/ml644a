@@ -1,5 +1,6 @@
 
 imgd=/imgdata/microcontroller-detection
+gtf=generate_tfrecord_mcontrolr.py
 
 # =================================================
 
@@ -7,9 +8,7 @@ imgd=/imgdata/microcontroller-detection
 
 
 
-python generate_tfrecord.py --csv_input=$img/train_labels.csv --image_dir=$imgd/train --output_path=$imgd/train.record
+python $gtf --csv_input=$imgd/train_labels.csv --image_dir=$imgd/train --output_path=$imgd/train.record
 
-python generate_tfrecord.py --csv_input=$img/test_labels.csv  --image_dir=$imgd/test  --output_path=$imgd/test.record
-
-
+python $gtf --csv_input=$imgd/test_labels.csv  --image_dir=$imgd/test  --output_path=$imgd/test.record
 

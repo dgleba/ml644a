@@ -1,0 +1,343 @@
+Mon Jul 18 02:11:28 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 465.19.01    Driver Version: 465.19.01    CUDA Version: 11.3     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA Quadro M...  On   | 00000000:00:05.0  On |                  N/A |
+| 46%   28C    P8    13W / 120W |    141MiB /  8126MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
++-----------------------------------------------------------------------------+
+Linux 743a36bd6dfd 5.4.0-105-generic #119-Ubuntu SMP Mon Mar 7 18:49:24 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+              total        used        free      shared  buff/cache   available
+Mem:           29Gi       1.3Gi        18Gi        11Mi       9.4Gi        27Gi
+Swap:            0B          0B          0B
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION="Ubuntu 20.04.4 LTS"
+Filesystem                   Size  Used Avail Use% Mounted on
+overlay                       50G   36G   12G  75% /
+tmpfs                         64M     0   64M   0% /dev
+tmpfs                         15G     0   15G   0% /sys/fs/cgroup
+shm                           64G     0   64G   0% /dev/shm
+/dev/mapper/ubuntu--vg-root   50G   36G   12G  75% /code
+tmpfs                         15G   12K   15G   1% /proc/driver/nvidia
+tmpfs                        3.0G  1.7M  3.0G   1% /run/nvidia-persistenced/socket
+udev                          15G     0   15G   0% /dev/nvidia0
+tmpfs                         15G     0   15G   0% /proc/acpi
+tmpfs                         15G     0   15G   0% /proc/scsi
+tmpfs                         15G     0   15G   0% /sys/firmware
+ # SSD with EfficientNet-b0 + BiFPN feature extractor,
+# shared box predictor and focal loss (a.k.a EfficientDet-d0).
+# See EfficientDet, Tan et al, https://arxiv.org/abs/1911.09070
+# See Lin et al, https://arxiv.org/abs/1708.02002
+# Trained on COCO, initialized from an EfficientNet-b0 checkpoint.
+#
+# Train on TPU-8
+
+model {
+  ssd {
+    inplace_batchnorm_update: true
+    freeze_batchnorm: false
+    num_classes: 2
+    add_background_class: false
+    box_coder {
+      faster_rcnn_box_coder {
+        y_scale: 10.0
+        x_scale: 10.0
+        height_scale: 5.0
+        width_scale: 5.0
+      }
+    }
+    matcher {
+      argmax_matcher {
+        matched_threshold: 0.5
+        unmatched_threshold: 0.5
+        ignore_thresholds: false
+        negatives_lower_than_unmatched: true
+        force_match_for_each_row: true
+        use_matmul_gather: true
+      }
+    }
+    similarity_calculator {
+      iou_similarity {
+      }
+    }
+    encode_background_as_zeros: true
+    anchor_generator {
+      multiscale_anchor_generator {
+        min_level: 3
+        max_level: 7
+        anchor_scale: 4.0
+        aspect_ratios: [1.0, 2.0, 0.5]
+        scales_per_octave: 3
+      }
+    }
+    image_resizer {
+      keep_aspect_ratio_resizer {
+        min_dimension: 896
+        max_dimension: 640
+        pad_to_max_dimension: true
+        }
+    }
+    box_predictor {
+      weight_shared_convolutional_box_predictor {
+        depth: 64
+        class_prediction_bias_init: -4.6
+        conv_hyperparams {
+          force_use_bias: true
+          activation: SWISH
+          regularizer {
+            l2_regularizer {
+              weight: 0.00004
+            }
+          }
+          initializer {
+            random_normal_initializer {
+              stddev: 0.01
+              mean: 0.0
+            }
+          }
+          batch_norm {
+            scale: true
+            decay: 0.99
+            epsilon: 0.001
+          }
+        }
+        num_layers_before_predictor: 3
+        kernel_size: 3
+        use_depthwise: true
+      }
+    }
+    feature_extractor {
+      type: 'ssd_efficientnet-b0_bifpn_keras'
+      bifpn {
+        min_level: 3
+        max_level: 7
+        num_iterations: 3
+        num_filters: 64
+      }
+      conv_hyperparams {
+        force_use_bias: true
+        activation: SWISH
+        regularizer {
+          l2_regularizer {
+            weight: 0.00004
+          }
+        }
+        initializer {
+          truncated_normal_initializer {
+            stddev: 0.03
+            mean: 0.0
+          }
+        }
+        batch_norm {
+          scale: true,
+          decay: 0.99,
+          epsilon: 0.001,
+        }
+      }
+    }
+    loss {
+      classification_loss {
+        weighted_sigmoid_focal {
+          alpha: 0.25
+          gamma: 1.5
+        }
+      }
+      localization_loss {
+        weighted_smooth_l1 {
+        }
+      }
+      classification_weight: 1.0
+      localization_weight: 1.0
+    }
+    normalize_loss_by_num_matches: true
+    normalize_loc_loss_by_codesize: true
+    post_processing {
+      batch_non_max_suppression {
+        score_threshold: 1e-8
+        iou_threshold: 0.5
+        max_detections_per_class: 100
+        max_total_detections: 100
+      }
+      score_converter: SIGMOID
+    }
+  }
+}
+
+train_config: {
+  fine_tune_checkpoint: "../tflib/efficientdet_d0_coco17_tpu-32/checkpoint/ckpt-0"
+  fine_tune_checkpoint_version: V2
+  fine_tune_checkpoint_type: "detection"
+  batch_size: 1
+  sync_replicas: true
+  startup_delay_steps: 0
+  replicas_to_aggregate: 8
+  use_bfloat16: true
+  num_steps: 8000
+  data_augmentation_options {
+    random_horizontal_flip {
+    }
+  }
+  optimizer {
+    momentum_optimizer: {
+      learning_rate: {
+        cosine_decay_learning_rate {
+          learning_rate_base: 8e-2
+          total_steps: 300000
+          warmup_learning_rate: .001
+          warmup_steps: 2500
+        }
+      }
+      momentum_optimizer_value: 0.9
+    }
+    use_moving_average: false
+  }
+  max_number_of_boxes: 100
+  unpad_groundtruth_tensors: false
+}
+
+train_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/train.record"
+  }
+}
+
+eval_config: {
+  metrics_set: "coco_detection_metrics"
+  use_moving_averages: false
+  batch_size: 1;
+}
+
+eval_input_reader: {
+  label_map_path: "../imgdata/ir4/labelmap.pbtxt"
+  shuffle: false
+  num_epochs: 1
+  tf_record_input_reader {
+    input_path: "../imgdata/ir4/test.record"
+  }
+}
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   46 bits physical, 48 bits virtual
+CPU(s):                          8
+On-line CPU(s) list:             0-7
+Thread(s) per core:              1
+Core(s) per socket:              8
+Socket(s):                       1
+NUMA node(s):                    1
+Vendor ID:                       GenuineIntel
+CPU family:                      6
+Model:                           79
+Model name:                      Intel(R) Xeon(R) CPU E5-2623 v4 @ 2.60GHz
+Stepping:                        1
+CPU MHz:                         2600.051
+BogoMIPS:                        5200.02
+Hypervisor vendor:               Xen
+Virtualization type:             full
+L1d cache:                       256 KiB
+L1i cache:                       256 KiB
+L2 cache:                        2 MiB
+L3 cache:                        80 MiB
+NUMA node0 CPU(s):               0-7
+Vulnerability Itlb multihit:     KVM: Vulnerable
+Vulnerability L1tf:              Mitigation; PTE Inversion
+Vulnerability Mds:               Mitigation; Clear CPU buffers; SMT Host state unknown
+Vulnerability Meltdown:          Mitigation; PTI
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Retpolines, IBPB conditional, IBRS_FW, STIBP disabled, RSB filling
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush acpi mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch cpuid_fault invpcid_single pti intel_ppin ssbd ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap xsaveopt md_clear flush_l1d
+2022-07-18 02:11:32.770269: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:32.779054: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:32.780111: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:32.781650: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2022-07-18 02:11:32.782769: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:32.783733: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:32.784749: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:33.553393: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:33.554245: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:33.554914: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:975] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2022-07-18 02:11:33.555526: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1532] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 7303 MB memory:  -> device: 0, name: NVIDIA Quadro M4000, pci bus id: 0000:00:05.0, compute capability: 5.2
+INFO:tensorflow:Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+I0718 02:11:33.739914 140564243040064 mirrored_strategy.py:374] Using MirroredStrategy with devices ('/job:localhost/replica:0/task:0/device:GPU:0',)
+INFO:tensorflow:Maybe overwriting train_steps: 8000
+I0718 02:11:33.744690 140564243040064 config_util.py:552] Maybe overwriting train_steps: 8000
+INFO:tensorflow:Maybe overwriting use_bfloat16: False
+I0718 02:11:33.744818 140564243040064 config_util.py:552] Maybe overwriting use_bfloat16: False
+I0718 02:11:33.756841 140564243040064 ssd_efficientnet_bifpn_feature_extractor.py:145] EfficientDet EfficientNet backbone version: efficientnet-b0
+I0718 02:11:33.757035 140564243040064 ssd_efficientnet_bifpn_feature_extractor.py:147] EfficientDet BiFPN num filters: 64
+I0718 02:11:33.757101 140564243040064 ssd_efficientnet_bifpn_feature_extractor.py:148] EfficientDet BiFPN num iterations: 3
+I0718 02:11:33.762714 140564243040064 efficientnet_model.py:143] round_filter input=32 output=32
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.791715 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.809606 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.813249 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.815426 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.825354 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.830657 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.839084 140564243040064 efficientnet_model.py:143] round_filter input=32 output=32
+I0718 02:11:33.839260 140564243040064 efficientnet_model.py:143] round_filter input=16 output=16
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.858333 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.859766 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.861830 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+INFO:tensorflow:Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.862902 140564243040064 cross_device_ops.py:616] Reduce to /job:localhost/replica:0/task:0/device:CPU:0 then broadcast to ('/job:localhost/replica:0/task:0/device:CPU:0',).
+I0718 02:11:33.968163 140564243040064 efficientnet_model.py:143] round_filter input=16 output=16
+I0718 02:11:33.968413 140564243040064 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 02:11:34.295255 140564243040064 efficientnet_model.py:143] round_filter input=24 output=24
+I0718 02:11:34.295445 140564243040064 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 02:11:34.627943 140564243040064 efficientnet_model.py:143] round_filter input=40 output=40
+I0718 02:11:34.628181 140564243040064 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 02:11:35.127993 140564243040064 efficientnet_model.py:143] round_filter input=80 output=80
+I0718 02:11:35.128314 140564243040064 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 02:11:35.651921 140564243040064 efficientnet_model.py:143] round_filter input=112 output=112
+I0718 02:11:35.652184 140564243040064 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 02:11:36.358683 140564243040064 efficientnet_model.py:143] round_filter input=192 output=192
+I0718 02:11:36.358914 140564243040064 efficientnet_model.py:143] round_filter input=320 output=320
+I0718 02:11:36.528931 140564243040064 efficientnet_model.py:143] round_filter input=1280 output=1280
+I0718 02:11:36.595821 140564243040064 efficientnet_model.py:453] Building model efficientnet with params ModelConfig(width_coefficient=1.0, depth_coefficient=1.0, resolution=224, dropout_rate=0.2, blocks=(BlockConfig(input_filters=32, output_filters=16, kernel_size=3, num_repeat=1, expand_ratio=1, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=16, output_filters=24, kernel_size=3, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=24, output_filters=40, kernel_size=5, num_repeat=2, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=40, output_filters=80, kernel_size=3, num_repeat=3, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=80, output_filters=112, kernel_size=5, num_repeat=3, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=112, output_filters=192, kernel_size=5, num_repeat=4, expand_ratio=6, strides=(2, 2), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise'), BlockConfig(input_filters=192, output_filters=320, kernel_size=3, num_repeat=1, expand_ratio=6, strides=(1, 1), se_ratio=0.25, id_skip=True, fused_conv=False, conv_type='depthwise')), stem_base_filters=32, top_base_filters=1280, activation='simple_swish', batch_norm='default', bn_momentum=0.99, bn_epsilon=0.001, weight_decay=5e-06, drop_connect_rate=0.2, depth_divisor=8, min_depth=None, use_se=True, input_channels=3, num_classes=1000, model_name='efficientnet', rescale_input=False, data_format='channels_last', dtype='float32')
+Traceback (most recent call last):
+  File "/tf/models/research/object_detection/model_main_tf2.py", line 114, in <module>
+    tf.compat.v1.app.run()
+  File "/usr/local/lib/python3.8/dist-packages/tensorflow/python/platform/app.py", line 36, in run
+    _run(main=main, argv=argv, flags_parser=_parse_flags_tolerate_undef)
+  File "/usr/local/lib/python3.8/dist-packages/absl/app.py", line 312, in run
+    _run_main(main, args)
+  File "/usr/local/lib/python3.8/dist-packages/absl/app.py", line 258, in _run_main
+    sys.exit(main(argv))
+  File "/tf/models/research/object_detection/model_main_tf2.py", line 105, in main
+    model_lib_v2.train_loop(
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/model_lib_v2.py", line 547, in train_loop
+    detection_model = MODEL_BUILD_UTIL_MAP['detection_model_fn_base'](
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/builders/model_builder.py", line 1252, in build
+    return build_func(getattr(model_config, meta_architecture), is_training,
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/builders/model_builder.py", line 433, in _build_ssd_model
+    image_resizer_fn = image_resizer_builder.build(ssd_config.image_resizer)
+  File "/usr/local/lib/python3.8/dist-packages/object_detection/builders/image_resizer_builder.py", line 80, in build
+    raise ValueError('min_dimension > max_dimension')
+ValueError: min_dimension > max_dimension
