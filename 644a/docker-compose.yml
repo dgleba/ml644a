@@ -16,7 +16,7 @@ services:
     volumes:
       - ./mltf2:/home/albe/mltf2
       #- ../ir4:/crib/ir4
-      - ./imgdata:/home/albe/imgdata
+      - ../imgdata:/home/albe/imgdata
       #- ./workspace:/workspace
       - ./home/dot/jupyter:/root/.jupyter
       #- ./home/dot/jupyter:/home/albe/.jupyter

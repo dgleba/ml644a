@@ -11,6 +11,8 @@ dc - docker-compose
 
 
 ```
+cd 644a
+
 dc build
 
 dc up
